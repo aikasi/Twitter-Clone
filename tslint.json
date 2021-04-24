@@ -6,6 +6,8 @@
     "rules": {
         "eofline": false,
         "ter-arrow-parens": false,
+        "semicolon" : false,
+        "trailing-comma": false,
         "quotemark": [
             false
           ]

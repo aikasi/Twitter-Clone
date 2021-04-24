@@ -1,0 +1,8 @@
+
+h1=users.id
+h2=users.email 
+
+each post in users.posts
+    a(href=routes.postDetail(post.id)) 
+        h3=post.id 
+        h4=post.name 
