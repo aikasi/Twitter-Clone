@@ -27,5 +27,13 @@ export const localMiddleware = (
   res.locals.siteName = "Project1";
   res.locals.routes = routes;
   res.locals.loggedUser = req.user || null;
+
+  res.locals.user = {
+    id: 1,
+    email: "test@naver.com",
+    password: "test123",
+    nick: "firstTestAccount",
+    tweet: [{ id: "60dd68dee369499b4c3da09f" }],
+  };
   next();
 };

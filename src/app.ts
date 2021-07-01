@@ -4,7 +4,7 @@ import * as morgan from "morgan";
 import * as passport from "passport";
 import * as expressSession from "express-session";
 import * as cookieParser from "cookie-parser";
-import pug from "pug";
+import * as pug from "pug";
 
 import {
   createConnection,
@@ -17,15 +17,15 @@ import {
   getRepository,
 } from "typeorm";
 import { User } from "./entity/mySql/User";
-import { User as Tweet } from "./entity/User";
-
-import "dotenv/config";
+import { Tweet } from "./entity/mongoDB/Tweet";
 import userRouter from "./routers/userRouter";
 import { passportConfig } from "./passport/index";
 import { localMiddleware } from "./middleware";
+import { join } from "path";
+
 import routes from "../routes";
 import postRouter from "./routers/postRouter";
-import { join } from "path";
+import "dotenv/config";
 
 const PORT = process.env.PORT || 4000;
 
@@ -85,16 +85,17 @@ createConnections([
         saveUninitialized: true,
       })
     );
-    app.use(passport.initialize());
-    app.use(passport.session());
+
+    // app.use(passport.initialize());
+    // app.use(passport.session());
 
     app.use(localMiddleware);
 
     app.use(userRouter);
-    app.use(routes.posts, postRouter);
+    app.use(routes.tweet, postRouter);
 
-    app.listen(4001, () => {
-      console.log("4000번 포트 연결 완료");
+    app.listen(process.env.PORT, () => {
+      console.log(`${process.env.PORT}번 포트 연결 완료`);
     });
   })
   .catch((error) => {

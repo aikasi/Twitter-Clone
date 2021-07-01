@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { User, UserInfo } from "../entity/mySql/User";
-
+import { localMiddleware } from "../middleware";
 export const getPostHome = async (
   req: Request,
   res: Response,
@@ -11,11 +11,10 @@ export const getPostHome = async (
     where: { id: req.user.id },
     relations: ["posts"],
   });
-
   res.render("posts", { users: exUser });
 };
 
-export const getPostDetail = async (
+export const getTweetDetail = async (
   req: Request,
   res: Response,
   next: NextFunction

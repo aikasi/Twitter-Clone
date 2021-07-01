@@ -6,12 +6,12 @@ const JOIN = "/join";
 const LOGIN = "/login";
 const LOGOUT = "/logout";
 
-// 게시판
-const POSTS = "/posts";
-const POST_CREATE = "/create";
-const POST_DETAIL = "/:id";
-const POST_EDIT = "/:id/edit";
-const POST_DELETE = "/:id/delete";
+// 트윗
+const TWEET = "/tweet";
+const TWEET_CREATE = "/create";
+const TWEET_DETAIL = "/:id";
+const TWEET_EDIT = "/:id/edit";
+const TWEET_DELETE = "/:id/delete";
 
 const routes = {
   home: HOME,
@@ -19,25 +19,25 @@ const routes = {
   login: LOGIN,
   logout: LOGOUT,
   error: ERROR,
-  posts: POSTS,
-  postCreate: POST_CREATE,
-  postDetail: (id: any) => {
+  tweet: TWEET,
+  tweetCreate: TWEET_CREATE,
+  tweetDetail: (id: any) => {
     if (id) {
-      return `${POSTS}/${id}`;
+      return `${TWEET}/${id}`;
     }
-    return POST_DETAIL;
+    return TWEET_DETAIL;
   },
-  postEdit: (id: any) => {
+  tweetEdit: (id: any) => {
     if (id) {
-      return `${POSTS}/${id}/edit`;
+      return `${TWEET}/${id}/edit`;
     }
-    return POST_EDIT;
+    return TWEET_EDIT;
   },
-  postDelete: (id: any) => {
+  tweetDelete: (id: any) => {
     if (id) {
-      return `${POSTS}/${id}/delete`;
+      return `${TWEET}/${id}/delete`;
     }
-    return POST_DELETE;
+    return TWEET_DELETE;
   },
 };
 

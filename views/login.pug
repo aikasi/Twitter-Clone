@@ -1,13 +1,12 @@
-<form action="/login" method="post">
-    <div>
-        <label>Username:</label>
-        <input type="text" name="email"/>
-    </div>
-    <div>
-        <label>Password:</label>
-        <input type="password" name="password"/>
-    </div>
-    <div>
-        <input type="submit" value="Log In"/>
-    </div>
-</form>
+extends base.pug
+
+block content
+    form(action="/login" method="POST")
+        div
+            label  휴대폰, 이메일, 사용자 아이디
+            input(type="text" name="email")
+        div 
+            label 비밀번호
+            input(type="password", name="password")
+        div
+            input(type="submit", value="로그인")

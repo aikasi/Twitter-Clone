@@ -1,3 +1,4 @@
+import { ObjectID } from "mongodb";
 import {
   Column,
   CreateDateColumn,
@@ -21,6 +22,7 @@ export interface UserInfo {
   firstName?: string;
   lastName?: string;
   age?: number;
+  tweet?: string;
 }
 
 @Entity()
@@ -48,6 +50,9 @@ export class User<UserInfo> {
 
   @Column({ nullable: true })
   age: number;
+
+  @Column({ nullable: true })
+  tweet: string;
 
   @CreateDateColumn()
   newDate: string;

@@ -1,16 +1,14 @@
 import * as express from "express";
 import { isLoggedIn } from "../middleware";
 import routes from "../../routes";
-import { getPost, postPost } from "../controllers/userController";
-import { getPostHome, getPostDetail } from "../controllers/postController";
+import { getTweet, postTweet } from "../controllers/userController";
+import { getPostHome, getTweetDetail } from "../controllers/tweetController";
 
 const postRouter: express.Router = express.Router();
 
-postRouter.get(routes.home, isLoggedIn, getPostHome);
+postRouter.get(routes.home, getPostHome);
 
-postRouter.get(routes.postCreate, isLoggedIn, getPost);
-postRouter.post(routes.postCreate, isLoggedIn, postPost);
-
-postRouter.get("/:id", isLoggedIn, getPostDetail);
+postRouter.get(routes.tweetCreate, getTweet);
+postRouter.post(routes.tweetCreate, postTweet);
 
 export default postRouter;
