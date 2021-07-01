@@ -3,9 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Info, TweetInfo } from "./TweetInfo";
 
 export enum Login {
   LOCAL = "LOCAL",
@@ -22,7 +24,7 @@ export interface UserInfo {
   firstName?: string;
   lastName?: string;
   age?: number;
-  tweet?: string;
+  tweet?: TweetInfo<Info>[];
 }
 
 @Entity()
@@ -51,8 +53,8 @@ export class User<UserInfo> {
   @Column({ nullable: true })
   age: number;
 
-  @Column({ nullable: true })
-  tweet: string;
+  @OneToMany(() => TweetInfo, (tweetInfo) => tweetInfo.user)
+  tweet: TweetInfo<Info>[];
 
   @CreateDateColumn()
   newDate: string;

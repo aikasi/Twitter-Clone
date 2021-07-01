@@ -33,7 +33,7 @@ export const localMiddleware = (
     email: "test@naver.com",
     password: "test123",
     nick: "firstTestAccount",
-    tweet: [{ id: "60dd68dee369499b4c3da09f" }],
+    tweet: [{ tweetId: "60dd68dee369499b4c3da09f" }],
   };
   next();
 };

@@ -26,6 +26,7 @@ import { join } from "path";
 import routes from "../routes";
 import postRouter from "./routers/postRouter";
 import "dotenv/config";
+import { TweetInfo } from "./entity/mySql/TweetInfo";
 
 const PORT = process.env.PORT || 4000;
 
@@ -52,23 +53,24 @@ createConnections([
     username: process.env.ORM_CONFIG_ID,
     password: process.env.ORM_CONFIG_PASSWORD,
     database: process.env.ORM_CONFIG_DBNAME,
-    entities: [User],
+    entities: [User, TweetInfo],
     synchronize: true,
     logging: process.env.NODE_ENV === "production" ? true : false,
   },
 ])
   .then((connection) => {
-    const mysqlDB = getConnection("mySQL");
-
-    mysqlDB.getRepository(User);
-
-    console.log("MySql Database Connection!");
-  })
-  .then((connection) => {
     const mongoDB = getConnection("default");
 
     mongoDB.getMongoRepository(Tweet);
     console.log("MongoDB Database Connection!");
+  })
+  .then((connection) => {
+    const mysqlDB = getConnection("mySQL");
+
+    mysqlDB.getRepository(User);
+    mysqlDB.getRepository(TweetInfo);
+
+    console.log("MySql Database Connection!");
   })
   .catch((error) => console.log(`Database Disconnected ${error}`))
 

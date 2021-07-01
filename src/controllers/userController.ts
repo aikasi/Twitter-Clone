@@ -107,7 +107,7 @@ export const postTweet = async (
     tweet.userId = res.locals.user.id;
     tweet.content = req.body.content;
     await getMongoManager().save(tweet);
-    const userTweet = { id: tweet.id.toString() };
+    const userTweet = { tweetId: tweet.id.toString() };
     res.locals.user.tweet.push(userTweet);
     res.render("home", { user: res.locals.user, pageTitle: "Home" });
   } catch (error) {
