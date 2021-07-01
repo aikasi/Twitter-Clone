@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { getRepository } from "typeorm";
-import { User, UserInfo } from "../models/mySql/User";
+import { User, UserInfo } from "../entity/mySql/User";
 
 export const getPostHome = async (
   req: Request,
@@ -13,4 +13,12 @@ export const getPostHome = async (
   });
 
   res.render("posts", { users: exUser });
+};
+
+export const getPostDetail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  return res.send(req.user.id.toString());
 };

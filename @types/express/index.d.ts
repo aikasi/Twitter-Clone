@@ -1,4 +1,4 @@
-import { User as UserModel, UserInfo } from "../../src/models/mySql/User";
+import { User as UserModel, UserInfo } from "../../src/entity/mySql/User";
 
 declare global {
   namespace Express {

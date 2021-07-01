@@ -1,6 +1,6 @@
 import * as passport from "passport";
 import { getConnection, getRepository } from "typeorm";
-import { User, UserInfo } from "../models/mySql/User";
+import { User, UserInfo } from "../entity/mySql/User";
 import { local } from "./local";
 
 export const passportConfig = () => {

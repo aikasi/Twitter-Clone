@@ -1,16 +1,11 @@
+import "reflect-metadata";
 import { NextFunction, Request, Response } from "express";
-import {
-  EntityRepository,
-  getConnection,
-  getRepository,
-  Repository,
-} from "typeorm";
-import { User, UserInfo } from "../models/mySql/User";
+import { getMongoManager, getMongoRepository, getRepository } from "typeorm";
+import { User, UserInfo } from "../entity/mySql/User";
 import * as passport from "passport";
 import * as bcrypt from "bcrypt";
 import routes from "../../routes";
-import { stringify } from "node:querystring";
-import { Post } from "../models/mySql/Post";
+import { User as Tweet } from "../entity/User";
 
 export const getHome = async (
   req: Request,
@@ -110,16 +105,50 @@ export const postPost = async (
       const message = `postPost Error: User Not Found`;
       res.render("error", { error: message });
     }
-    const post = await getRepository(Post).save(
-      getRepository(Post).create({
-        name: req.body.title,
-        user: exUser,
-      })
-    );
-    res.redirect(routes.postDetail(exUser.id));
+    // const mongoPost = new PostContent();
+    // mongoPost.id = post.content.toString();
+    // mongoPost.content = req.body.content;
+    // const manager = getMongoManager();
+    // await manager.save(mongoPost);
   } catch (error) {
     console.error("postPost Error: ?");
     const message = "postPost Error: ?";
     res.render("error", { error: message });
+  }
+};
+
+export const getMongoTest = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  res.render("test");
+};
+
+export const postMongoTest = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const mongo = new Tweet();
+    console.log(req.body.content);
+    mongo.firstName = req.body.content;
+    mongo.firstName = req.body.content;
+    const manager = getMongoManager();
+    await manager.save(mongo);
+    console.log(
+      await getMongoRepository(Tweet).find({ firstName: req.body.content })
+    );
+    console.log("----------------");
+    const db1 = await manager.find(Tweet, {});
+    console.log(db1);
+    console.log("----------------");
+    const db2 = await manager.find(Tweet, { firstName: req.body.content });
+    console.log(db2);
+    res.redirect(routes.home);
+  } catch (error) {
+    console.log("Error", error);
+    res.redirect(routes.error);
   }
 };

@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import * as express from "express";
 import * as morgan from "morgan";
 import * as passport from "passport";
@@ -5,17 +6,26 @@ import * as expressSession from "express-session";
 import * as cookieParser from "cookie-parser";
 import pug from "pug";
 
-import { createConnection, createConnections, getConnection } from "typeorm";
-import { User } from "./src/models/mySql/User";
-import { Post } from "./src/models/mySql/Post";
+import {
+  createConnection,
+  createConnections,
+  getConnection,
+  getConnectionManager,
+  getManager,
+  getMongoManager,
+  getMongoRepository,
+  getRepository,
+} from "typeorm";
+import { User } from "./entity/mySql/User";
+import { User as Tweet } from "./entity/User";
 
 import "dotenv/config";
-import userRouter from "./src/routers/userRouter";
-import { passportConfig } from "./src/passport/index";
+import userRouter from "./routers/userRouter";
+import { passportConfig } from "./passport/index";
 import { localMiddleware } from "./middleware";
-import routes from "./routes";
-import postRouter from "./src/routers/postRouter";
-import { PostContent } from "./src/models/mongoDB/PostContent";
+import routes from "../routes";
+import postRouter from "./routers/postRouter";
+import { join } from "path";
 
 const PORT = process.env.PORT || 4000;
 
@@ -24,48 +34,49 @@ passportConfig();
 
 createConnections([
   {
-    name: "mysqlDB",
+    name: "default",
+    type: "mongodb",
+    host: "localhost",
+    port: 27017,
+    database: "project",
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    entities: [Tweet],
+    synchronize: true,
+  },
+  {
+    name: "mySQL",
     type: "mysql",
     host: "localhost",
     port: 3306,
     username: process.env.ORM_CONFIG_ID,
     password: process.env.ORM_CONFIG_PASSWORD,
     database: process.env.ORM_CONFIG_DBNAME,
-    entities: [User, Post],
-    synchronize: true,
-    logging: process.env.NODE_ENV === "production" ? true : false,
-  },
-  {
-    name: "mongoDB",
-    type: "mongodb",
-    host: "localhost",
-    port: 27017,
-    database: "project1",
-    entities: [PostContent],
+    entities: [User],
     synchronize: true,
     logging: process.env.NODE_ENV === "production" ? true : false,
   },
 ])
   .then((connection) => {
-    const mysqlDB = getConnection("mysqlDB");
+    const mysqlDB = getConnection("mySQL");
 
     mysqlDB.getRepository(User);
-    mysqlDB.getRepository(Post);
 
     console.log("MySql Database Connection!");
   })
   .then((connection) => {
-    const mongoDB = getConnection("mongoDB");
+    const mongoDB = getConnection("default");
 
-    mongoDB.getMongoRepository(PostContent);
+    mongoDB.getMongoRepository(Tweet);
     console.log("MongoDB Database Connection!");
   })
   .catch((error) => console.log(`Database Disconnected ${error}`))
-  .then(() => {
+
+  .then(async () => {
     app.use(morgan("dev"));
     app.set("view engine", "pug");
     app.use(express.json());
-    app.use(express.urlencoded({ extended: false }));
+    app.use(express.urlencoded({ extended: true }));
     app.use(cookieParser(process.env.COOKIE_SECRET));
     app.use(
       expressSession({
@@ -82,7 +93,7 @@ createConnections([
     app.use(userRouter);
     app.use(routes.posts, postRouter);
 
-    app.listen(4000, () => {
+    app.listen(4001, () => {
       console.log("4000번 포트 연결 완료");
     });
   })

@@ -7,9 +7,11 @@ import {
   postLogin,
   getPost,
   postPost,
+  getMongoTest,
+  postMongoTest,
 } from "../controllers/userController";
 import routes from "../../routes";
-import { isLoggedIn, isNotLoggedIn } from "../../middleware";
+import { isLoggedIn, isNotLoggedIn } from "../middleware";
 
 const userRouter: express.Router = express.Router();
 
@@ -20,5 +22,8 @@ userRouter.post(routes.join, postJoin);
 
 userRouter.get(routes.login, getLogin);
 userRouter.post(routes.login, postLogin);
+
+userRouter.get("/test", getMongoTest);
+userRouter.post("/test", postMongoTest);
 
 export default userRouter;

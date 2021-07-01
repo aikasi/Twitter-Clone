@@ -21,19 +21,19 @@ const routes = {
   error: ERROR,
   posts: POSTS,
   postCreate: POST_CREATE,
-  postDetail: (id) => {
+  postDetail: (id: any) => {
     if (id) {
       return `${POSTS}/${id}`;
     }
     return POST_DETAIL;
   },
-  postEdit: (id) => {
+  postEdit: (id: any) => {
     if (id) {
       return `${POSTS}/${id}/edit`;
     }
     return POST_EDIT;
   },
-  postDelete: (id) => {
+  postDelete: (id: any) => {
     if (id) {
       return `${POSTS}/${id}/delete`;
     }

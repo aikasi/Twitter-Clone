@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import routes from "./routes";
+import routes from "../routes";
 
 export const isLoggedIn = (req: Request, res: Response, next) => {
   console.log(req.isAuthenticated());

@@ -1,7 +1,7 @@
 import * as passport from "passport";
 import * as LocalStrategy from "passport-local";
 import * as bcrypt from "bcrypt";
-import { User } from "../models/mySql/User";
+import { User } from "../entity/mySql/User";
 import { getRepository } from "typeorm";
 
 export const local = () => {
@@ -18,7 +18,9 @@ export const local = () => {
           if (exUser) {
             const result = await bcrypt.compare(
               password,
-              (await exUser).password
+              (
+                await exUser
+              ).password
             );
             if (result) {
               done(null, exUser);

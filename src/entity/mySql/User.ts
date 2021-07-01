@@ -2,11 +2,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Post } from "./Post";
 
 export enum Login {
   LOCAL = "LOCAL",
@@ -23,7 +21,6 @@ export interface UserInfo {
   firstName?: string;
   lastName?: string;
   age?: number;
-  posts: Post[];
 }
 
 @Entity()
@@ -57,7 +54,4 @@ export class User<UserInfo> {
 
   @UpdateDateColumn()
   updateDate: string;
-
-  @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
 }
