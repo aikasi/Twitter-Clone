@@ -4,6 +4,7 @@ interface TweetInfo {
   id?: ObjectID;
   userId: string;
   content: string;
+  file?: string;
 }
 
 @Entity()
@@ -13,6 +14,9 @@ export class Tweet<TweetInfo> {
 
   @Column()
   userId: string;
+
+  @Column({ nullable: true })
+  file: string;
 
   @Column()
   content: string;

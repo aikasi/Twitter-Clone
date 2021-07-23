@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import routes from "../routes";
+import * as multer from "multer";
+import * as fs from "fs";
+import * as path from "path";
 
 export const isLoggedIn = (req: Request, res: Response, next) => {
   console.log(req.isAuthenticated());
@@ -19,6 +22,20 @@ export const isNotLoggedIn = (req: Request, res: Response, next) => {
   }
 };
 
+const multerTweet = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, "uploads/tweet");
+    },
+    filename(req, file, cb) {
+      const ext = path.extname(file.originalname);
+      cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+    },
+  }),
+});
+
+export const uploadTweet = multerTweet.single("tweetFile");
+
 export const localMiddleware = (
   req: Request,
   res: Response,
@@ -33,7 +50,22 @@ export const localMiddleware = (
     email: "test@naver.com",
     password: "test123",
     nick: "firstTestAccount",
-    tweet: [{ tweetId: "60dd68dee369499b4c3da09f" }],
+    tweet: [{ tweetId: "1" }, { tweetId: "2" }, { tweetId: "3" }],
+    tweetCount: 3,
   };
+  res.locals.userTwo = {
+    id: 2,
+    email: "test1@naver.com",
+    password: "test123",
+    nick: "secondTestAccount",
+    tweet: [
+      { tweetId: "4" },
+      { tweetId: "5" },
+      { tweetId: "6" },
+      { tweetId: "7" },
+    ],
+    tweetCount: 4,
+  };
+
   next();
 };

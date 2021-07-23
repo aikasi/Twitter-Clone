@@ -92,6 +92,7 @@ createConnections([
     // app.use(passport.session());
 
     app.use(localMiddleware);
+    app.use("/uploads", express.static("uploads"));
 
     app.use(userRouter);
     app.use(routes.tweet, postRouter);

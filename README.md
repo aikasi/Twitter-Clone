@@ -31,6 +31,7 @@
  - createdAt
  - updatedAt
  - [x] 트윗 내용
+ - [x] 사진 저장(multer) !한장만 가능
  - 미디어 구분
  - 좋아요
  - 답글

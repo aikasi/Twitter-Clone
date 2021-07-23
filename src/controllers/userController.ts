@@ -2,13 +2,41 @@ import "reflect-metadata";
 import { NextFunction, Request, Response } from "express";
 import { getMongoManager, getMongoRepository, getRepository } from "typeorm";
 import { User, UserInfo } from "../entity/mySql/User";
+import { Tweet } from "../entity/mongoDB/Tweet";
 import * as passport from "passport";
 import * as bcrypt from "bcrypt";
 import routes from "../../routes";
-import { Tweet } from "../entity/mongoDB/Tweet";
+import * as fs from "fs";
+
+const getMongoTweet = async () => {
+  const tweetsRepository = getMongoRepository(Tweet);
+  const tweets = await tweetsRepository.find();
+  console.log(tweets);
+  return tweets;
+};
 
 export const getHome = async (req: Request, res: Response) => {
-  return res.render("home", { user: res.locals.user, pageTitle: "Home" });
+  try {
+    console.log("uploads 폴더 확인중...");
+    fs.readdirSync("uploads");
+    console.log("uploads 폴더 확인 완료");
+  } catch (error) {
+    console.error("upload 폴더가 없어서 uploads 폴더를 만듭니다.");
+    fs.mkdirSync("uploads");
+  }
+  try {
+    fs.readdirSync("uploads/tweet");
+  } catch (error) {
+    console.error("tweet 폴더가 없어서 tweet 폴더를 만듭니다.");
+    fs.mkdirSync("uploads/tweet");
+  }
+
+  const tweets = await getMongoTweet();
+  return res.render("home", {
+    tweets,
+    user: res.locals.user,
+    pageTitle: "Home",
+  });
 };
 
 export const getJoin = async (
@@ -103,13 +131,24 @@ export const postTweet = async (
     //   res.render("error", { error: message });
     // }
 
+    // 저장
+
+    console.log(req.file);
     const tweet = new Tweet();
     tweet.userId = res.locals.user.id;
     tweet.content = req.body.content;
+    tweet.file = req.file ? req.file.path : null;
     await getMongoManager().save(tweet);
+
+    // user정보 업데이트
     const userTweet = { tweetId: tweet.id.toString() };
     res.locals.user.tweet.push(userTweet);
-    res.render("home", { user: res.locals.user, pageTitle: "Home" });
+    res.locals.user.tweetCount += 1;
+    console.log(res.locals.user.tweetCount);
+
+    const tweets = await getMongoTweet();
+    // res.render("home", { tweets, user: res.locals.user, pageTitle: "Home" });
+    res.redirect(routes.home);
   } catch (error) {
     console.error("postTweet Error: ?");
     const message = "postTweet Error: ?";

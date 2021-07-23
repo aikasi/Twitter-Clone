@@ -25,6 +25,7 @@ export interface UserInfo {
   lastName?: string;
   age?: number;
   tweet?: TweetInfo<Info>[];
+  tweetCount: number;
 }
 
 @Entity()
@@ -55,6 +56,9 @@ export class User<UserInfo> {
 
   @OneToMany(() => TweetInfo, (tweetInfo) => tweetInfo.user)
   tweet: TweetInfo<Info>[];
+
+  @Column()
+  tweetCount: number;
 
   @CreateDateColumn()
   newDate: string;
