@@ -25,13 +25,12 @@
  - 메인트윗
 
  ## 트윗 Model
- - 프로필 사진
  - [x] 이름
  - [x] 아이디
- - createdAt
- - updatedAt
+ - [ ] createdAt
+ - [ ] updatedAt
  - [x] 트윗 내용
  - [x] 사진 저장(multer) !한장만 가능
- - 미디어 구분
- - 좋아요
- - 답글
+ - [ ] 미디어 저장
+ - [ ] 좋아요
+ - [ ] 답글

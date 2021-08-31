@@ -6,11 +6,14 @@ block content
     h4=user.password
     h4=user.nick
     h3 Tweet
-
+    p ----------------------------------------------
     each tweet in tweets
-        h4=tweet.id
+        h3 tweet ID : #{tweet.id}
+        if tweet.content
+            h4 Content : #{tweet.content}
         if tweet.file
             div
+                h4 Image
                 img(src=tweet.file alt=tweet.file)
             h4 -------------------------------
 
