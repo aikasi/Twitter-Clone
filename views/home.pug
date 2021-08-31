@@ -7,16 +7,22 @@ block content
     h4=user.nick
     h3 Tweet
     p ----------------------------------------------
+    
     each tweet in tweets
-        h3 tweet ID : #{tweet.id}
-        if tweet.content
-            h4 Content : #{tweet.content}
-        if tweet.file
+        div
+            h3 tweet ID : #{tweet.id}
+            if tweet.content
+                h4 Content : #{tweet.content}
+            if tweet.file
+                if tweet.media === "image"
+                    div
+                        img(src=tweet.file alt=tweet.file)
+                else if tweet.media === "video"
+                    div  
+                        video(src=tweet.file alt=tweet.file controls=true) 
             div
-                h4 Image
-                img(src=tweet.file alt=tweet.file)
-            h4 -------------------------------
-
+                h5 댓글 리트윗 좋아요 공유
+            p -----------------------------------------------
     each info in user.tweet
         h4=info.tweetId
 

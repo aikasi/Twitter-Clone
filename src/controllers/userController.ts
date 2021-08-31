@@ -11,7 +11,7 @@ import * as fs from "fs";
 const getMongoTweet = async () => {
   const tweetsRepository = getMongoRepository(Tweet);
   const tweets = await tweetsRepository.find();
-  console.log(tweets);
+  // console.log(tweets);
   return tweets;
 };
 
@@ -30,6 +30,18 @@ export const getHome = async (req: Request, res: Response) => {
     console.error("tweet 폴더가 없어서 tweet 폴더를 만듭니다.");
     fs.mkdirSync("uploads/tweet");
   }
+  try {
+    fs.readdirSync("uploads/tweet/image");
+  } catch (error) {
+    console.error("image 폴더가 없어서 image 폴더를 만듭니다.");
+    fs.mkdirSync("uploads/tweet/image");
+  }
+  try {
+    fs.readdirSync("uploads/tweet/video");
+  } catch (error) {
+    console.error("video 폴더가 없어서 video 폴더를 만듭니다.");
+    fs.mkdirSync("uploads/tweet/video");
+  }
 
   const tweets = await getMongoTweet();
   return res.render("home", {
@@ -38,7 +50,6 @@ export const getHome = async (req: Request, res: Response) => {
     pageTitle: "Home",
   });
 };
-
 export const getJoin = async (
   req: Request,
   res: Response,
@@ -138,8 +149,20 @@ export const postTweet = async (
     tweet.userId = res.locals.user.id;
     tweet.content = req.body.content;
     tweet.file = req.file ? req.file.path : null;
-    await getMongoManager().save(tweet);
+    if (tweet.file) {
+      const pathNames = req.file.mimetype.split("/");
+      const pathName = pathNames[0];
 
+      if (pathName === "image") {
+        tweet.media = "image";
+      } else if (pathName === "video") {
+        tweet.media = "video";
+      }
+    } else {
+      tweet.media = "default";
+    }
+    await getMongoManager().save(tweet);
+    console.log(tweet);
     // user정보 업데이트
     const userTweet = { tweetId: tweet.id.toString() };
     res.locals.user.tweet.push(userTweet);

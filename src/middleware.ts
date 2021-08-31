@@ -25,7 +25,26 @@ export const isNotLoggedIn = (req: Request, res: Response, next) => {
 const multerTweet = multer({
   storage: multer.diskStorage({
     destination(req, file, cb) {
-      cb(null, "uploads/tweet");
+      const fileNames = file.mimetype.split("/");
+      const fileName = fileNames[0];
+      console.log(file);
+      if (fileName === "video") {
+        cb(null, "uploads/tweet/video");
+      } else if (fileName === "image") {
+        cb(null, "uploads/tweet/image");
+      }
+    },
+    filename(req, file, cb) {
+      const ext = path.extname(file.originalname);
+      cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+    },
+  }),
+});
+
+const multerTweetVideo = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, "uploads/tweet/video");
     },
     filename(req, file, cb) {
       const ext = path.extname(file.originalname);
@@ -35,6 +54,7 @@ const multerTweet = multer({
 });
 
 export const uploadTweet = multerTweet.single("tweetFile");
+// export const uploadTweetVideo = multerTweetVideo.single("tweetFile");
 
 export const localMiddleware = (
   req: Request,

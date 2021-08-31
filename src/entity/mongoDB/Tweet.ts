@@ -1,4 +1,3 @@
-import { type } from "node:os";
 import {
   Column,
   CreateDateColumn,
@@ -15,6 +14,7 @@ interface TweetInfo {
   file?: string;
   createAt?: Date;
   updateAt?: Date;
+  media?: string;
 }
 
 @Entity()
@@ -27,6 +27,9 @@ export class Tweet<TweetInfo> {
 
   @Column({ nullable: true })
   file: string;
+
+  @Column()
+  media: string;
 
   @Column()
   content: string;
