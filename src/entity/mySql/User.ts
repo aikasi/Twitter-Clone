@@ -26,6 +26,9 @@ export interface UserInfo {
   age?: number;
   tweet?: TweetInfo<Info>[];
   tweetCount: number;
+  profilePhoto: string;
+  headerPhoto: string;
+  selfIntroduction: string;
 }
 
 @Entity()
@@ -35,6 +38,12 @@ export class User<UserInfo> {
 
   @Column({ type: "enum", enum: Login, default: Login.LOCAL })
   role: Login;
+
+  @CreateDateColumn()
+  newDate: string;
+
+  @UpdateDateColumn()
+  updateDate: string;
 
   @Column()
   email: string;
@@ -54,15 +63,18 @@ export class User<UserInfo> {
   @Column({ nullable: true })
   age: number;
 
+  @Column({ nullable: true })
+  profilePhoto: string;
+
+  @Column({ nullable: true })
+  headerPhoto: string;
+
+  @Column({ nullable: true })
+  selfIntroduction: string;
+
   @OneToMany(() => TweetInfo, (tweetInfo) => tweetInfo.user)
   tweet: TweetInfo<Info>[];
 
   @Column()
   tweetCount: number;
-
-  @CreateDateColumn()
-  newDate: string;
-
-  @UpdateDateColumn()
-  updateDate: string;
 }

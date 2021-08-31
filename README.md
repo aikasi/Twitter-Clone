@@ -27,8 +27,8 @@
  ## 트윗 Model
  - [x] 이름
  - [x] 아이디
- - [ ] createdAt
- - [ ] updatedAt
+ - [x] createdAt
+ - [x] updatedAt
  - [x] 트윗 내용
  - [x] 사진 저장(multer) !한장만 가능
  - [ ] 미디어 저장
