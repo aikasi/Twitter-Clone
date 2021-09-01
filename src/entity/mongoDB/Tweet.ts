@@ -15,6 +15,7 @@ interface TweetInfo {
   createAt?: Date;
   updateAt?: Date;
   media?: string;
+  reply?: string;
 }
 
 @Entity()
@@ -33,6 +34,13 @@ export class Tweet<TweetInfo> {
 
   @Column()
   content: string;
+
+  @Column({ default: 0 })
+  likeNumber: number;
+
+  // 댓글기능
+  @Column({ nullable: true })
+  reply: string;
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createAt: Date;
