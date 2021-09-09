@@ -21,11 +21,11 @@ block content
                     div  
                         video(src=tweet.file alt=tweet.file controls=true) 
             div
-                div 
-                    a 댓글 
-                    | 리트윗 
-                    | 좋아요 
-                    | 공유
+                
+                //- a(href="#") 댓글
+                //- a(href="#") 리트윗
+                button(type='submit')#jsAddLike 좋아요
+                
             p -----------------------------------------------
     each info in user.tweet
         h4=info.tweetId

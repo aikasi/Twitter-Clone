@@ -27,6 +27,9 @@ import routes from "../routes";
 import postRouter from "./routers/postRouter";
 import "dotenv/config";
 import { TweetInfo } from "./entity/mySql/TweetInfo";
+import { Like } from "./entity/mongoDB/Like";
+import { UserLike } from "./entity/mySql/UserLike";
+import path = require("path");
 
 const PORT = process.env.PORT || 4000;
 
@@ -42,7 +45,7 @@ createConnections([
     database: "project",
     useUnifiedTopology: true,
     useNewUrlParser: true,
-    entities: [Tweet],
+    entities: [Tweet, Like],
     synchronize: true,
   },
   {
@@ -53,7 +56,7 @@ createConnections([
     username: process.env.ORM_CONFIG_ID,
     password: process.env.ORM_CONFIG_PASSWORD,
     database: process.env.ORM_CONFIG_DBNAME,
-    entities: [User, TweetInfo],
+    entities: [User, TweetInfo, UserLike],
     synchronize: true,
     logging: process.env.NODE_ENV === "production" ? true : false,
   },
@@ -93,6 +96,7 @@ createConnections([
 
     app.use(localMiddleware);
     app.use("/uploads", express.static("uploads"));
+    app.use("/assets", express.static("assets"));
 
     app.use(userRouter);
     app.use(routes.tweet, postRouter);
