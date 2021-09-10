@@ -11,7 +11,7 @@ block content
     
     each tweet in tweets
 
-        div
+        a(href=routes.tweetDetail(tweet.id))
             div
                 if tweet.reply
                     p reply for : `#{tweet.reply}`

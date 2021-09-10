@@ -30,13 +30,13 @@ const routes = {
   tweetCreate: TWEET_CREATE,
   tweetReply: (id?) => {
     if (id) {
-      return `${TWEET}/${id}/reply`;
+      return `${API}/${id}/reply`;
     } else {
       return TWEET_REPLY;
     }
   },
   // pugReplyHome: `${TWEET}${TWEET_CREATE}`,
-  tweetDetail: (id) => {
+  tweetDetail: (id?) => {
     if (id) {
       return `${TWEET}/${id}`;
     } else {

@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Like, LikeInfo } from "./Like";
+import { LowerTweet, LowerTweetInfo } from "./LowerTweet";
 
 export interface TweetInfo {
   id?: ObjectID;
@@ -19,8 +20,9 @@ export interface TweetInfo {
   updateAt?: Date;
   media?: string;
   reply?: string;
+  lowerTweet?: LowerTweet<LowerTweetInfo>[];
   likeNumber?: number;
-  likes?: Like<LikeInfo>;
+  likes?: Like<LikeInfo>[];
 }
 
 @Entity()
@@ -49,6 +51,11 @@ export class Tweet<TweetInfo> {
   // 댓글기능
   @Column({ nullable: true })
   reply: string;
+
+  @OneToMany(() => LowerTweet, (lowerTweet) => lowerTweet.tweet, {
+    cascade: true,
+  })
+  lowerTweet: LowerTweet<LowerTweetInfo>[];
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createAt: Date;

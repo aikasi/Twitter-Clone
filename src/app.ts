@@ -31,6 +31,7 @@ import { Like } from "./entity/mongoDB/Like";
 import { UserLike } from "./entity/mySql/UserLike";
 import path = require("path");
 import apiRouter from "./routers/apiRouter";
+import { LowerTweet } from "./entity/mongoDB/LowerTweet";
 
 const PORT = process.env.PORT || 4000;
 
@@ -46,7 +47,7 @@ createConnections([
     database: "project",
     useUnifiedTopology: true,
     useNewUrlParser: true,
-    entities: [Tweet, Like],
+    entities: [Tweet, Like, LowerTweet],
     synchronize: true,
   },
   {
