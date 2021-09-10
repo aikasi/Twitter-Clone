@@ -1,4 +1,5 @@
 extends base.pug
+include mixins/tweetCreateBlock
 
 block content
     h4=user.id
@@ -9,38 +10,40 @@ block content
     p ----------------------------------------------
     
     each tweet in tweets
-        
+
         div
-            h3 tweet ID : #{tweet.id}
-            if tweet.content
-                h4 Content : #{tweet.content}
-            if tweet.file
-                if tweet.media === "image"
-                    div
-                        img(src=tweet.file alt=tweet.file)
-                else if tweet.media === "video"
-                    div  
-                        video(src=tweet.file alt=tweet.file controls=true) 
-            
-                
-                //- a(href="#") 댓글
-                //- a(href="#") 리트윗
-        each like, index in user.likes
-            p user : #{like.id}
-            p tweet : #{tweet.id}
-            if like.id == tweet.id 
-                - var aaaa = true
-            if aaaa
-                div
-                    button(type='submit' class="unlike" value=tweet.id)#jsAddLike.addLike 좋아요 취소
-                -break
-            if (index + 1)  > (user.likes.length - 1)
-                div
-                    button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
-        else 
             div
-                button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
-        p -----------------------------------------------
+                if tweet.reply
+                    p reply for : `#{tweet.reply}`
+                h3 tweet ID : #{tweet.id}
+                if tweet.content
+                    h4 Content : #{tweet.content}
+                if tweet.file
+                    if tweet.media === "image"
+                        div
+                            img(src=tweet.file alt=tweet.file)
+                    else if tweet.media === "video"
+                        div  
+                            video(src=tweet.file alt=tweet.file controls=true) 
+            div
+                button(type='submit')#jsAddAnser 댓글
+                div
+                    +tweetCreateBlock({url: routes.tweetReply(tweet.id)})
+                each like, index in user.likes
+                    if like.id == tweet.id 
+                        - var isLike = true
+                    if isLike
+                        div
+                            button(type='submit' class="unlike" value=tweet.id)#jsAddLike.addLike 좋아요 취소
+                        -break
+                    if (index + 1)  > (user.likes.length - 1)
+                        div
+                            button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
+                else 
+                    div
+                        button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
+                
+                p -----------------------------------------------
     each info in user.tweet
         h4=info.tweetId
 

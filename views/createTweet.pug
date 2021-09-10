@@ -1,9 +1,8 @@
 extends base.pug
+include mixins/tweetCreateBlock
 
 block content 
-    form(method="POST" enctype="multipart/form-data")
-        input(type="text" name="content" placeholder = "What's happening?")
-        div
-            label(for="file") Tweet File 
-            input(type="file" id="tweetFile" name="tweetFile" accept="video/*,image/*")
-        input(type="submit", value="Tweet")
+    +tweetCreateBlock({
+        url: `/tweet${routes.tweetCreate}`
+    })
+    

@@ -1,0 +1,7 @@
+mixin tweetCreateBlock(tweet = {})
+    form(action=tweet.url method="POST" enctype="multipart/form-data")
+        input(type="text" name="content" placeholder = "What's happening?")
+        div
+            label(for="file") Tweet File 
+            input(type="file" id="tweetFile" name="tweetFile" accept="video/*,image/*")
+        input(type="submit", value="Tweet")

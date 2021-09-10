@@ -184,30 +184,56 @@ export const postTweet = async (
   }
 };
 
-// export const postMongoTest = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const mongo = new Tweet();
-//     console.log(req.body.content);
-//     mongo.firstName = req.body.content;
-//     mongo.firstName = req.body.content;
-//     const manager = getMongoManager();
-//     await manager.save(mongo);
-//     console.log(
-//       await getMongoRepository(Tweet).find({ firstName: req.body.content })
-//     );
-//     console.log("----------------");
-//     const db1 = await manager.find(Tweet, {});
-//     console.log(db1);
-//     console.log("----------------");
-//     const db2 = await manager.find(Tweet, { firstName: req.body.content });
-//     console.log(db2);
-//     res.redirect(routes.home);
-//   } catch (error) {
-//     console.log("Error", error);
-//     res.redirect(routes.error);
-//   }
-// };
+export const postReply = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // 실제 유저db 때 사용
+    // const exUser: User<UserInfo> = await getRepository(User).findOne({
+    //   where: { id: req.user.id },
+    // });
+    // if (!exUser) {
+    //   const message = `postPost Error: User Not Found`;
+    //   res.render("error", { error: message });
+    // }
+
+    // 저장
+
+    console.log(req.file);
+    const tweet = new Tweet();
+    tweet.userId = res.locals.user.id;
+    tweet.content = req.body.content;
+    tweet.reply = req.params.id;
+    console.log(tweet.reply);
+    tweet.file = req.file ? req.file.path : null;
+    if (tweet.file) {
+      const pathNames = req.file.mimetype.split("/");
+      const pathName = pathNames[0];
+
+      if (pathName === "image") {
+        tweet.media = "image";
+      } else if (pathName === "video") {
+        tweet.media = "video";
+      }
+    } else {
+      tweet.media = "default";
+    }
+    await getMongoManager().save(tweet);
+    console.log(tweet);
+    // user정보 업데이트
+    const userTweet = { tweetId: tweet.id.toString() };
+    res.locals.user.tweet.push(userTweet);
+    res.locals.user.tweetCount += 1;
+    console.log(res.locals.user.tweetCount);
+
+    const tweets = await getMongoTweet();
+    // res.render("home", { tweets, user: res.locals.user, pageTitle: "Home" });
+    res.redirect(routes.home);
+  } catch (error) {
+    console.error("postTweet Error: ?");
+    const message = "postTweet Error: ?";
+    res.render("error", { error: message });
+  }
+};

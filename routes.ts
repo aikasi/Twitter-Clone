@@ -9,6 +9,7 @@ const LOGOUT = "/logout";
 // 트윗
 const TWEET = "/tweet";
 const TWEET_CREATE = "/create";
+const TWEET_REPLY = "/:id/reply";
 const TWEET_DETAIL = "/:id";
 const TWEET_EDIT = "/:id/edit";
 const TWEET_DELETE = "/:id/delete";
@@ -27,6 +28,14 @@ const routes = {
   tweet: TWEET,
   api: API,
   tweetCreate: TWEET_CREATE,
+  tweetReply: (id?) => {
+    if (id) {
+      return `${TWEET}/${id}/reply`;
+    } else {
+      return TWEET_REPLY;
+    }
+  },
+  // pugReplyHome: `${TWEET}${TWEET_CREATE}`,
   tweetDetail: (id) => {
     if (id) {
       return `${TWEET}/${id}`;
