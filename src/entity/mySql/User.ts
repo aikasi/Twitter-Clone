@@ -7,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { UserLike, UserLikeInfo } from "./UserLike";
 import { Info, TweetInfo } from "./TweetInfo";
 
 export enum Login {
@@ -74,10 +73,7 @@ export class User<UserInfo> {
   selfIntroduction: string;
 
   @OneToMany(() => TweetInfo, (tweetInfo) => tweetInfo.user)
-  tweets: TweetInfo<Info>[];
-
-  @OneToMany(() => UserLike, (userlike) => userlike.user)
-  likes: UserLike<UserLikeInfo>[];
+  tweet: TweetInfo<Info>[];
 
   @Column()
   tweetCount: number;

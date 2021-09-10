@@ -2,8 +2,7 @@
     "defaultSeverity": "error",
     "extends": ["tslint:recommended"],
     "tslint.autoFixOnSave": true,
-    "jsRules": {
-    },
+    "jsRules": {},
     "rules": {
         "eofline": false,
         "ter-arrow-parens": false,

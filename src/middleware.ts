@@ -85,16 +85,6 @@ export const localMiddleware = (
       { tweetId: "7" },
     ],
     tweetCount: 4,
-    // newDate
-    // updateDate
-    // firstName
-    // lastName
-    // age
-    // profilePhoto
-    // headerPhoto
-    // selfIntroduction
-    // tweets
-    // likes
   };
 
   next();

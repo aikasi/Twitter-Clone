@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { User, UserInfo } from "./User";
 
 export interface Info {
@@ -15,6 +21,6 @@ export class TweetInfo<Info> {
   @Column()
   tweetId: string;
 
-  @ManyToOne(() => User, (user) => user.tweets)
+  @ManyToOne(() => User, (user) => user.tweet)
   user: User<UserInfo>;
 }
