@@ -70,8 +70,20 @@ export const localMiddleware = (
     email: "test@naver.com",
     password: "test123",
     nick: "firstTestAccount",
-    tweet: [{ tweetId: "1" }, { tweetId: "2" }, { tweetId: "3" }],
-    tweetCount: 3,
+    tweet: [],
+    tweetCount: 0,
+    likes: [
+      { id: "613b50787b525196a4a7b132", userId: 1 },
+      { id: "613b50817b525196a4a7b134", userId: 1 },
+      {
+        id: "613b508b7b525196a4a7b136",
+        userId: 1,
+      },
+      {
+        id: "613b507d7b525196a4a7b133",
+        userId: 1,
+      },
+    ],
   };
   res.locals.userTwo = {
     id: 2,

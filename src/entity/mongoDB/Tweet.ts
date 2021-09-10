@@ -5,11 +5,12 @@ import {
   Entity,
   ObjectID,
   ObjectIdColumn,
+  OneToMany,
   UpdateDateColumn,
 } from "typeorm";
 import { Like, LikeInfo } from "./Like";
 
-interface TweetInfo {
+export interface TweetInfo {
   id?: ObjectID;
   userId: string;
   content: string;
@@ -18,6 +19,8 @@ interface TweetInfo {
   updateAt?: Date;
   media?: string;
   reply?: string;
+  likeNumber?: number;
+  likes?: Like<LikeInfo>;
 }
 
 @Entity()
@@ -40,8 +43,8 @@ export class Tweet<TweetInfo> {
   @Column({ default: 0 })
   likeNumber: number;
 
-  @Column(() => Like)
-  Likes: Like<LikeInfo>[];
+  @OneToMany(() => Like, (like) => like.tweet, { cascade: true })
+  likes: Like<LikeInfo>[];
 
   // 댓글기능
   @Column({ nullable: true })

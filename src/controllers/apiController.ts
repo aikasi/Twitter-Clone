@@ -31,15 +31,66 @@ export const PostTweetLike = async (
     // await tweetRepository.findOneAndUp
     const like = new Like();
 
-    // User id로 정보 변경해야함
+    // tweet 에 like -> User id로 정보 변경해야함
     like.userId = res.locals.user.id;
-
     await getMongoManager().save(like);
+
     await tweetRepository.findOneAndUpdate(
       { _id: ObjectId(tweetId) },
-      { $inc: { likeNumber: 1 }, $push: { Likes: [like] } },
+      { $inc: { likeNumber: 1 }, $push: { likes: like } },
       { upsert: true }
     );
+    console.log(tweet);
+
+    // 유저 정보 업뎃
+    // User 에 Like 정보 업데이트
+    console.log(
+      res.locals.user.likes.push({ id: tweet.id, userId: tweet.userId })
+    );
+    res.locals.user.likes.push({ id: tweet.id, userId: tweet.userId });
+    console.log("유저 정보 : ");
+    console.log(res.locals.user);
+    console.log("좋아요 업데이트 완료");
+  } catch (error) {
+    console.log("error : " + error);
+  } finally {
+    res.end();
+  }
+};
+
+export const PostTweetLikeCancel = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {
+    body: { tweetId },
+  } = req;
+  try {
+    const tweetRepository = getMongoRepository(Tweet);
+    const [tweet] = await tweetRepository.findByIds([ObjectId(tweetId)]);
+
+    const likeRepository = getMongoRepository(Like);
+    const likes = await likeRepository.findOneAndDelete({
+      userId: res.locals.user.id,
+    });
+    console.log(likes);
+    await tweetRepository.findOneAndUpdate(
+      { _id: ObjectId(tweetId) },
+      {
+        $inc: { likeNumber: -1 },
+        $pull: { likes: { userId: res.locals.user.id } },
+      },
+      { upsert: true }
+    );
+    console.log(tweet);
+
+    // User id로 정보 변경해야함
+    // like.userId = res.locals.user.id;
+
+    // await getMongoManager().save(like);
+    // await tweetRepository.findOneAndDelete({ _id: ObjectId(tweetId) });
+
     console.log(tweet);
     console.log("좋아요 업데이트 완료");
 

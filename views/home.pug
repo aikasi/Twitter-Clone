@@ -9,6 +9,7 @@ block content
     p ----------------------------------------------
     
     each tweet in tweets
+        
         div
             h3 tweet ID : #{tweet.id}
             if tweet.content
@@ -20,13 +21,26 @@ block content
                 else if tweet.media === "video"
                     div  
                         video(src=tweet.file alt=tweet.file controls=true) 
-            div
+            
                 
                 //- a(href="#") 댓글
                 //- a(href="#") 리트윗
-                button(type='submit'  value=tweet.id)#jsAddLike.addLike 좋아요
-                
-            p -----------------------------------------------
+        each like, index in user.likes
+            p user : #{like.id}
+            p tweet : #{tweet.id}
+            if like.id == tweet.id 
+                - var aaaa = true
+            if aaaa
+                div
+                    button(type='submit' class="unlike" value=tweet.id)#jsAddLike.addLike 좋아요 취소
+                -break
+            if (index + 1)  > (user.likes.length - 1)
+                div
+                    button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
+        else 
+            div
+                button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
+        p -----------------------------------------------
     each info in user.tweet
         h4=info.tweetId
 

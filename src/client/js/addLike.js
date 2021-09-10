@@ -17,10 +17,34 @@ const sendLike = async (like) => {
   }
 };
 
-const handleLikeClick = (event) => {
+const sendLikeCancel = async (like) => {
+  const response = await axios({
+    url: `http://localhost:4001/api/${like}/like/cancel`,
+    method: "POST",
+    data: {
+      tweetId: like,
+    },
+  });
+  console.log(response);
+  if (response.status === 200) {
+    console.log("보내기 성공");
+  }
+};
+
+const handleLikeClick = async (event) => {
   event.preventDefault();
   const tweetId = event.target.value;
-  sendLike(tweetId);
+  let likeList = event.target.classList;
+  let result = likeList.toggle("unlike");
+  if (result) {
+    event.target.innerText = "좋아요 취소";
+    console.log("A");
+    sendLike(tweetId);
+  } else {
+    event.target.innerText = "좋아요";
+    console.log("B");
+    sendLikeCancel(tweetId);
+  }
 };
 
 function init() {

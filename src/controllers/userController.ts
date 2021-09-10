@@ -44,9 +44,14 @@ export const getHome = async (req: Request, res: Response) => {
   }
 
   const tweets = await getMongoTweet();
+  console.log(tweets);
+  if (tweets[0]) {
+    console.log(tweets[0].likes);
+  }
+  console.log(res.locals.user);
   return res.render("home", {
     tweets,
-    user: res.locals.user,
+    // user: res.locals.user,
     pageTitle: "Home",
   });
 };

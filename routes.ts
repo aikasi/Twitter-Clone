@@ -13,9 +13,10 @@ const TWEET_DETAIL = "/:id";
 const TWEET_EDIT = "/:id/edit";
 const TWEET_DELETE = "/:id/delete";
 
-//like
+// like
 const API = "/api";
 const TWEET_LIKE = "/:id/like";
+const TWEET_LIKE_CANCEL = "/:id/like/cancel";
 
 const routes = {
   home: HOME,
@@ -52,6 +53,13 @@ const routes = {
       return `${API}/${id}/like`;
     } else {
       return TWEET_LIKE;
+    }
+  },
+  tweetLikeCancel: (id?) => {
+    if (id) {
+      return `${API}/${id}/cancel`;
+    } else {
+      return TWEET_LIKE_CANCEL;
     }
   },
 };
