@@ -34,7 +34,9 @@ block content
                 else 
                     div
                         button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
-        div 
+            div
+                a(href=routes.tweetDelete(tweet.id)) 삭제
+                
             +tweetCreateBlock({
                 url: routes.tweetReply(tweet.id)
             })

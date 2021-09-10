@@ -42,7 +42,8 @@ block content
                 else 
                     div
                         button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
-                
+                div
+                    a(href=routes.tweetDelete(tweet.id)) 삭제 
                 p -----------------------------------------------
     each info in user.tweet
         h4=info.tweetId

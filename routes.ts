@@ -12,12 +12,12 @@ const TWEET_CREATE = "/create";
 const TWEET_REPLY = "/:id/reply";
 const TWEET_DETAIL = "/:id";
 const TWEET_EDIT = "/:id/edit";
-const TWEET_DELETE = "/:id/delete";
 
 // like
 const API = "/api";
 const TWEET_LIKE = "/:id/like";
 const TWEET_LIKE_CANCEL = "/:id/like/cancel";
+const TWEET_DELETE = "/:id/delete";
 
 const routes = {
   home: HOME,
@@ -50,7 +50,7 @@ const routes = {
       return TWEET_EDIT;
     }
   },
-  tweetDelete: (id) => {
+  tweetDelete: (id?) => {
     if (id) {
       return `${TWEET}/${id}/delete`;
     } else {
