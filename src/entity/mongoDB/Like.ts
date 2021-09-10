@@ -1,6 +1,6 @@
 import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
 
-interface LikeInfo {
+export interface LikeInfo {
   id?: ObjectID;
   userId: string;
 }

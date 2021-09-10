@@ -1,3 +1,4 @@
+import { type } from "os";
 import {
   Column,
   CreateDateColumn,
@@ -6,6 +7,7 @@ import {
   ObjectIdColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Like, LikeInfo } from "./Like";
 
 interface TweetInfo {
   id?: ObjectID;
@@ -37,6 +39,9 @@ export class Tweet<TweetInfo> {
 
   @Column({ default: 0 })
   likeNumber: number;
+
+  @Column(() => Like)
+  Likes: Like<LikeInfo>[];
 
   // 댓글기능
   @Column({ nullable: true })

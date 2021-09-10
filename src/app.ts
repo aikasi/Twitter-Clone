@@ -30,6 +30,7 @@ import { TweetInfo } from "./entity/mySql/TweetInfo";
 import { Like } from "./entity/mongoDB/Like";
 import { UserLike } from "./entity/mySql/UserLike";
 import path = require("path");
+import apiRouter from "./routers/apiRouter";
 
 const PORT = process.env.PORT || 4000;
 
@@ -100,6 +101,7 @@ createConnections([
 
     app.use(userRouter);
     app.use(routes.tweet, postRouter);
+    app.use(routes.api, apiRouter);
 
     app.listen(process.env.PORT, () => {
       console.log(`${process.env.PORT}번 포트 연결 완료`);

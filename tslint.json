@@ -1,6 +1,6 @@
 {
     "defaultSeverity": "error",
-    "extends": ["eslint:recommended","plugin:@typescript-eslint-recommended"],
+    "extends": ["tslint:recommended"],
     "tslint.autoFixOnSave": true,
     "jsRules": {
     },
@@ -8,6 +8,7 @@
         "eofline": false,
         "ter-arrow-parens": false,
         "semicolon" : false,
+        "no-console": false,
         "trailing-comma": false,
         "quotemark": [
             false

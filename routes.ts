@@ -13,6 +13,10 @@ const TWEET_DETAIL = "/:id";
 const TWEET_EDIT = "/:id/edit";
 const TWEET_DELETE = "/:id/delete";
 
+//like
+const API = "/api";
+const TWEET_LIKE = "/:id/like";
+
 const routes = {
   home: HOME,
   join: JOIN,
@@ -20,24 +24,35 @@ const routes = {
   logout: LOGOUT,
   error: ERROR,
   tweet: TWEET,
+  api: API,
   tweetCreate: TWEET_CREATE,
-  tweetDetail: (id: any) => {
+  tweetDetail: (id) => {
     if (id) {
       return `${TWEET}/${id}`;
+    } else {
+      return TWEET_DETAIL;
     }
-    return TWEET_DETAIL;
   },
-  tweetEdit: (id: any) => {
+  tweetEdit: (id) => {
     if (id) {
       return `${TWEET}/${id}/edit`;
+    } else {
+      return TWEET_EDIT;
     }
-    return TWEET_EDIT;
   },
-  tweetDelete: (id: any) => {
+  tweetDelete: (id) => {
     if (id) {
       return `${TWEET}/${id}/delete`;
+    } else {
+      return TWEET_DELETE;
     }
-    return TWEET_DELETE;
+  },
+  tweetLike: (id?) => {
+    if (id) {
+      return `${API}/${id}/like`;
+    } else {
+      return TWEET_LIKE;
+    }
   },
 };
 
