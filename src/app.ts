@@ -21,7 +21,6 @@ import { Tweet } from "./entity/mongoDB/Tweet";
 import userRouter from "./routers/userRouter";
 import { passportConfig } from "./passport/index";
 import { localMiddleware } from "./middleware";
-import { join } from "path";
 
 import routes from "../routes";
 import postRouter from "./routers/postRouter";
@@ -29,56 +28,25 @@ import "dotenv/config";
 import { TweetInfo } from "./entity/mySql/TweetInfo";
 import { Like } from "./entity/mongoDB/Like";
 import { UserLike } from "./entity/mySql/UserLike";
-import path = require("path");
 import apiRouter from "./routers/apiRouter";
 import { LowerTweet } from "./entity/mongoDB/LowerTweet";
+import { join } from "path";
 
 const PORT = process.env.PORT || 4000;
 
 const app: express.Application = express();
 passportConfig();
 
-createConnections([
-  {
-    name: "default",
-    type: "mongodb",
-    host: "localhost",
-    port: 27017,
-    database: "project",
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    entities: [Tweet, Like, LowerTweet],
-    synchronize: true,
-  },
-  {
-    name: "mySQL",
-    type: "mysql",
-    host: "localhost",
-    port: 3306,
-    username: process.env.ORM_CONFIG_ID,
-    password: process.env.ORM_CONFIG_PASSWORD,
-    database: process.env.ORM_CONFIG_DBNAME,
-    entities: [User, TweetInfo, UserLike],
-    synchronize: true,
-    logging: process.env.NODE_ENV === "production" ? true : false,
-  },
-])
-  .then((connection) => {
-    const mongoDB = getConnection("default");
-
-    mongoDB.getMongoRepository(Tweet);
-    console.log("MongoDB Database Connection!");
-  })
-  .then((connection) => {
-    const mysqlDB = getConnection("mySQL");
-
-    mysqlDB.getRepository(User);
-    mysqlDB.getRepository(TweetInfo);
-
-    console.log("MySql Database Connection!");
-  })
-  .catch((error) => console.log(`Database Disconnected ${error}`))
-
+createConnection({
+  type: "mongodb",
+  host: "localhost",
+  port: 27017,
+  database: "project",
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  entities: [Tweet, Like, LowerTweet, User, TweetInfo, UserLike],
+  synchronize: true,
+})
   .then(async () => {
     app.use(morgan("dev"));
     app.set("view engine", "pug");
@@ -93,8 +61,8 @@ createConnections([
       })
     );
 
-    // app.use(passport.initialize());
-    // app.use(passport.session());
+    app.use(passport.initialize());
+    app.use(passport.session());
 
     app.use(localMiddleware);
     app.use("/uploads", express.static("uploads"));

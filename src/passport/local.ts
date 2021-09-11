@@ -2,7 +2,7 @@ import * as passport from "passport";
 import * as LocalStrategy from "passport-local";
 import * as bcrypt from "bcrypt";
 import { User } from "../entity/mySql/User";
-import { getRepository } from "typeorm";
+import { getMongoRepository, getRepository } from "typeorm";
 
 export const local = () => {
   passport.use(
@@ -11,9 +11,7 @@ export const local = () => {
       async (email, password, done) => {
         console.log("local");
         try {
-          const exUser = await getRepository(User).findOne({
-            where: { email },
-          });
+          const exUser = await getMongoRepository(User).findOne(email);
           console.log(exUser);
           if (exUser) {
             const result = await bcrypt.compare(

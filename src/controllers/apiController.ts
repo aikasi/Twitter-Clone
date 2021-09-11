@@ -26,10 +26,7 @@ export const PostTweetLike = async (
   try {
     const tweetRepository = getMongoRepository(Tweet);
     const [tweet] = await tweetRepository.findByIds([ObjectId(tweetId)]);
-    // tweet.likeNumber = +1;
-    // tweet.Likes = [(new Like<LikeInfo>().userId = res.locals.user.id)];
-    // await getMongoManager().update(tweet)
-    // await tweetRepository.findOneAndUp
+
     const like = new Like();
 
     // tweet 에 like -> User id로 정보 변경해야함
@@ -89,9 +86,6 @@ export const PostTweetLikeCancel = async (
     // User id로 정보 변경해야함
     // like.userId = res.locals.user.id;
 
-    // await getMongoManager().save(like);
-    // await tweetRepository.findOneAndDelete({ _id: ObjectId(tweetId) });
-
     console.log(tweet);
     console.log("좋아요 업데이트 완료");
 
@@ -137,10 +131,7 @@ export const postReply = async (
 
     const tweetRepository = getMongoRepository(Tweet);
     const [tweet] = await tweetRepository.findByIds([ObjectId(id)]);
-    // tweet.likeNumber = +1;
-    // tweet.Likes = [(new Like<LikeInfo>().userId = res.locals.user.id)];
-    // await getMongoManager().update(tweet)
-    // await tweetRepository.findOneAndUp
+
     const like = new LowerTweet();
 
     // tweet 에 like -> User id로 정보 변경해야함

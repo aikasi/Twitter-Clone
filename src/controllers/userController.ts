@@ -45,10 +45,10 @@ export const getHome = async (req: Request, res: Response) => {
   }
 
   const tweets = await getMongoTweet();
-
+  console.log(res.locals.loggedUser);
   return res.render("home", {
     tweets,
-    // user: res.locals.user,
+    //  user: res.locals.user,
     pageTitle: "Home",
   });
 };
@@ -65,24 +65,28 @@ export const postJoin = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { email, password } = req.body;
   try {
-    const exUser = await getRepository(User).findOne({
-      where: { email },
-    });
-    console.log(exUser);
-    if (exUser) {
-      res.render("home");
+    const { email, password, password2 } = req.body;
+    if (password !== password2) {
+      return res.status(404).render("join", {
+        errorMessage: "패스워드가 맞지않습니다.",
+      });
     }
-    const hash = await bcrypt.hash(password, 12);
-    await getRepository(User).save(
-      getRepository(User).create({
-        email,
-        password: hash,
-      })
-    );
+    const UserRepository = getMongoRepository(User);
+    const useremailExists = await UserRepository.findOne({ email });
+    if (useremailExists) {
+      return res.status(404).render("join", {
+        errorMessage: "Tis username is already taken.",
+      });
+    }
+    console.log(email, password);
+    const exUser = new User();
+    exUser.email = email;
+    const hash = await bcrypt.hash(password, 7);
+    exUser.password = hash;
+    await getMongoManager().save(exUser);
     console.log("성공");
-    return res.redirect("home");
+    return res.redirect("/login");
   } catch (error) {
     console.error("LocalJoinController Error : ", error);
   }
@@ -136,7 +140,7 @@ export const postTweet = async (
 ) => {
   try {
     // 실제 유저db 때 사용
-    // const exUser: User<UserInfo> = await getRepository(User).findOne({
+    // const exUser: User<UserInfo> = await getMongoRepository(User).findOne({
     //   where: { id: req.user.id },
     // });
     // if (!exUser) {
@@ -171,8 +175,8 @@ export const postTweet = async (
     // res.render("home", { tweets, user: res.locals.user, pageTitle: "Home" });
     res.redirect(routes.home);
   } catch (error) {
-    console.error("postTweet Error: ?");
     const message = "postTweet Error: ?";
-    res.render("error", { error: message });
+    console.error("postTweet Error: " + error);
+    res.status(404).render("error", { error: message });
   }
 };

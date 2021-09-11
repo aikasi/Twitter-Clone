@@ -2,6 +2,8 @@ import {
   Column,
   Entity,
   ManyToOne,
+  ObjectID,
+  ObjectIdColumn,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -15,8 +17,8 @@ export interface UserLikeInfo {
 
 @Entity()
 export class UserLike<UserLikeInfo> {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @ObjectIdColumn()
+  id: ObjectID;
 
   @Column()
   tweetId: string;

@@ -1,5 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User, UserInfo } from "./User";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  ObjectID,
+  ObjectIdColumn,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { User, UserInfo } from "../mySql/User";
 
 export interface Info {
   id: number;
@@ -9,8 +16,8 @@ export interface Info {
 
 @Entity()
 export class TweetInfo<Info> {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @ObjectIdColumn()
+  id: ObjectID;
 
   @Column()
   tweetId: string;

@@ -2,10 +2,6 @@ extends base.pug
 include mixins/tweetCreateBlock
 
 block content
-    h4=user.id
-    h4=user.email
-    h4=user.password
-    h4=user.nick
     h3 Tweet
     p ----------------------------------------------
     
@@ -45,7 +41,6 @@ block content
                 div
                     a(href=routes.tweetDelete(tweet.id)) 삭제 
                 p -----------------------------------------------
-    each info in user.tweet
-        h4=info.tweetId
+    
 
     a(href=`${routes.tweet}${routes.tweetCreate}`) Tweet

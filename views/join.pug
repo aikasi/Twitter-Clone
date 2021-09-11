@@ -1,13 +1,20 @@
-<form action="/join" method="post">
-    <div>
-        <label>Username:</label>
-        <input type="text" name="email"/>
-    </div>
-    <div>
-        <label>Password:</label>
-        <input type="password" name="password"/>
-    </div>
-    <div>
-        <input type="submit" value="Join"/>
-    </div>
-</form>
+extends base.pug
+
+
+block content
+    if errorMessage 
+        span=errorMessage
+    <form action="/join" method="post">
+        <div>
+            <label>Username:</label>
+            <input type="text" name="email"/>
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" name="password"/>
+            <input placeholdeer="ConfirmPassword" type="password" name="password2"/>
+        </div>
+        <div>
+            <input type="submit" value="Join"/>
+        </div>
+    </form>

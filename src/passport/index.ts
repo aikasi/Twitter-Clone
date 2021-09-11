@@ -1,5 +1,5 @@
 import * as passport from "passport";
-import { getConnection, getRepository } from "typeorm";
+import { getConnection, getMongoRepository, getRepository } from "typeorm";
 import { User, UserInfo } from "../entity/mySql/User";
 import { local } from "./local";
 
@@ -11,8 +11,8 @@ export const passportConfig = () => {
 
   passport.deserializeUser((id, done) => {
     console.log("des");
-    getRepository(User)
-      .findOne({ where: { id } })
+    getMongoRepository(User)
+      .findOne(id)
       .then((user) => done(null, user))
       .catch((error) => done(error));
   });

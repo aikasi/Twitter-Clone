@@ -1,14 +1,15 @@
-import { ObjectID } from "mongodb";
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ObjectID,
+  ObjectIdColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { UserLike, UserLikeInfo } from "./UserLike";
-import { Info, TweetInfo } from "./TweetInfo";
+import { Info, TweetInfo } from "../mySql/TweetInfo";
 
 export enum Login {
   LOCAL = "LOCAL",
@@ -18,7 +19,7 @@ export enum Login {
 }
 
 export interface UserInfo {
-  id: number;
+  id?: ObjectID;
   email: string;
   password: string;
   nick?: string;
@@ -26,27 +27,31 @@ export interface UserInfo {
   lastName?: string;
   age?: number;
   tweet?: TweetInfo<Info>[];
-  tweetCount: number;
-  profilePhoto: string;
-  headerPhoto: string;
-  selfIntroduction: string;
+  tweetCount?: number;
+  profilePhoto?: string;
+  headerPhoto?: string;
+  selfIntroduction?: string;
 }
 
 @Entity()
 export class User<UserInfo> {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @ObjectIdColumn()
+  id: ObjectID;
 
-  @Column({ type: "enum", enum: Login, default: Login.LOCAL })
+  @Column({ type: "enum", default: Login.LOCAL })
   role: Login;
 
-  @CreateDateColumn()
-  newDate: string;
+  @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  createAt: Date;
 
-  @UpdateDateColumn()
-  updateDate: string;
+  @UpdateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP",
+    onUpdate: "CURRENT_TIMESTAMP",
+  })
+  updateAt: Date;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -79,6 +84,6 @@ export class User<UserInfo> {
   @OneToMany(() => UserLike, (userlike) => userlike.user)
   likes: UserLike<UserLikeInfo>[];
 
-  @Column()
+  @Column({ nullable: true })
   tweetCount: number;
 }

@@ -10,11 +10,11 @@ export const getPostHome = async (
   res: Response,
   next: NextFunction
 ) => {
-  const [exUser]: User<UserInfo>[] = await getRepository(User).find({
-    where: { id: req.user.id },
-    relations: ["posts"],
-  });
-  res.render("posts", { users: exUser });
+  // const [exUser]: User<UserInfo>[] = await getRepository(User).find({
+  //   where: { id: req.user.id },
+  //   relations: ["posts"],
+  // });
+  // res.render("posts", { users: exUser });
 };
 
 export const getTweetDetail = async (
