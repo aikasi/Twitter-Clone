@@ -9,7 +9,7 @@ block content
         a(href=routes.tweetDetail(tweet.id))
             div
                 if tweet.reply
-                    p reply for : `#{tweet.reply}`
+                    p reply for : #{tweet.reply}
                 h3 tweet ID : #{tweet.id}
                 if tweet.content
                     h4 Content : #{tweet.content}
