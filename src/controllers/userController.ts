@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { NextFunction, Request, Response } from "express";
 import { getMongoManager, getMongoRepository, getRepository } from "typeorm";
-import { User, UserInfo } from "../entity/mySql/User";
+import { User, UserInfo, Login } from "../entity/mySql/User";
 import { Tweet } from "../entity/mongoDB/Tweet";
 import * as passport from "passport";
 import * as bcrypt from "bcrypt";
@@ -9,7 +9,6 @@ import routes from "../../routes";
 import * as fs from "fs";
 import { LowerTweet, LowerTweetInfo } from "../entity/mongoDB/LowerTweet";
 import * as session from "express-session";
-
 const getMongoTweet = async () => {
   const tweetsRepository = getMongoRepository(Tweet);
   const tweets = await tweetsRepository.find();
@@ -90,6 +89,7 @@ export const postJoin = async (
     console.log(email, password);
     const exUser = new User();
     exUser.email = email;
+    exUser.role = Login.LOCAL;
     const hash = await bcrypt.hash(password, 7);
     exUser.password = hash;
     await getMongoManager().save(exUser);
@@ -118,7 +118,7 @@ export const postLogin = async (
       body: { email, password },
     } = req;
     const UserRepository = getMongoRepository(User);
-    const user = await UserRepository.findOne({ email });
+    const user = await UserRepository.findOne({ email, role: Login.LOCAL });
     if (!user) {
       return res.status(400).render("login", {
         errorMessage: "email을 가진 유저가 존재하지 않습니다.",
@@ -193,4 +193,9 @@ export const postTweet = async (
     console.error("postTweet Error: " + error);
     res.status(404).render("error", { error: message });
   }
+};
+
+export const getLogout = (req: Request, res: Response, next: NextFunction) => {
+  req.session.destroy(() => req.session);
+  res.redirect("/");
 };

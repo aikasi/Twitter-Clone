@@ -5,6 +5,7 @@ import {
   getHome,
   postJoin,
   postLogin,
+  getLogout,
 } from "../controllers/userController";
 import routes from "../../routes";
 import { isLoggedIn, isNotLoggedIn } from "../middleware";
@@ -18,5 +19,7 @@ userRouter.post(routes.join, postJoin);
 
 userRouter.get(routes.login, getLogin);
 userRouter.post(routes.login, postLogin);
+
+userRouter.get(routes.logout, getLogout);
 
 export default userRouter;
