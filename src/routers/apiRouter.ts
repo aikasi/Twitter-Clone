@@ -1,5 +1,5 @@
 import * as express from "express";
-import { isLoggedIn, uploadTweet } from "../middleware";
+import { uploadTweet } from "../middleware";
 import routes from "../../routes";
 import {
   // postDeleteTweet,

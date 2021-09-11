@@ -24,6 +24,13 @@ declare module "express-session" {
   }
 }
 
+declare module "express" {
+  interface Request {
+    body: any;
+    files: any;
+  }
+}
+
 export const getHome = async (req: Request, res: Response) => {
   try {
     console.log("uploads 폴더 확인중...");
@@ -105,6 +112,12 @@ export const postJoin = async (
     exUser.tweetCount = 0;
     exUser.likeCount = 0;
     exUser.likes = [];
+    exUser.nick = "";
+    exUser.firstName = "";
+    exUser.lastName = "";
+    exUser.age = 0;
+    exUser.profilePhoto = "uploads/defaultProfile.png";
+    exUser.selfIntroduction = "";
     const hash = await bcrypt.hash(password, 7);
     exUser.password = hash;
     await getMongoManager().save(exUser);
@@ -208,3 +221,62 @@ export const getLogout = (req: Request, res: Response, next: NextFunction) => {
   req.session.destroy(() => req.session);
   res.redirect("/");
 };
+
+export const getProfileEdit = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  return res.render("uesrProfileEdit");
+};
+
+export const postProfileEdit = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const {
+      body: { firstName, lastName, nickName, age, selfIntroduction },
+    } = req;
+    const {
+      files: { headerFile, profileFile },
+    } = req;
+    const firstNameDB = firstName ? firstName : "";
+    const lastNameDB = lastName ? lastName : "";
+    const nickNameDB = nickName ? nickName : "";
+    const ageDB = age ? age : "";
+    const selfIntroductionDB = selfIntroduction ? selfIntroduction : "";
+
+    const header = headerFile[0] ? headerFile[0] : "";
+    const profile = profileFile[0] ? profileFile[0] : "";
+
+    const userRepository = getMongoRepository(User);
+    await userRepository.findOneAndUpdate(
+      { _id: ObjectId(res.locals.loggedInUser.id) },
+      {
+        $set: {
+          firstName: firstNameDB,
+          lastName: lastNameDB,
+          nick: nickNameDB,
+          age: ageDB,
+          selfIntroduction: selfIntroductionDB,
+          headerPhoto: header.path ? header.path : "",
+          profilePhoto: profile.path ? profile.path : "",
+        },
+      },
+      { upsert: true }
+    );
+
+    return res.redirect("/");
+  } catch (error) {
+    console.log("ERROR : " + error);
+  }
+};
+// firstName
+// lastName
+// nick
+// age
+// headerPhoto
+// profilePhoto
+// selfIntroduction

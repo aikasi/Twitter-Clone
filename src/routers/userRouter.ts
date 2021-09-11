@@ -6,9 +6,11 @@ import {
   postJoin,
   postLogin,
   getLogout,
+  getProfileEdit,
+  postProfileEdit,
 } from "../controllers/userController";
 import routes from "../../routes";
-import { isLoggedIn, isNotLoggedIn } from "../middleware";
+import { uploadAvatar } from "../middleware";
 
 const userRouter: express.Router = express.Router();
 
@@ -21,5 +23,8 @@ userRouter.get(routes.login, getLogin);
 userRouter.post(routes.login, postLogin);
 
 userRouter.get(routes.logout, getLogout);
+
+userRouter.get("/profile/edit", getProfileEdit);
+userRouter.post("/profile/edit", uploadAvatar, postProfileEdit);
 
 export default userRouter;

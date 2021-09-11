@@ -19,6 +19,10 @@ const TWEET_LIKE = "/:id/like";
 const TWEET_LIKE_CANCEL = "/:id/like/cancel";
 const TWEET_DELETE = "/:id/delete";
 
+// User
+const PROFILE = "/profile";
+const Edit = "/edit";
+
 const routes = {
   home: HOME,
   join: JOIN,

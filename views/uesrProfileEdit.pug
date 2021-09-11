@@ -1,0 +1,15 @@
+extends base.pug
+
+block content
+    form(action="/profile/edit" method="POST" enctype="multipart/form-data")
+        input(type="text" name="firstName" placeholder="First Name")
+        input(type="text" name="lastName" placeholder="Last Name")
+        div
+            label(for="file") 헤더 사진 
+                input(type="file" id="headerFile" name="headerFile" accept="image/*")
+            label(for="file") 프로필 사진
+                input(type="file" id="profileFile" name="profileFile" accept="image/*")
+        input(placeholder="Nick Name" type="text" name="nickName")
+        input(placeholder="age" type="number" name="age")
+        input(placeholder="selfIntroduction" type="text" name="selfIntroduction")
+        input(type="submit" value="수정")
