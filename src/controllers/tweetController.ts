@@ -52,10 +52,9 @@ export const getDeleteTweet = async (
     // lowerTweet
     const tweetDB = await tweetsRepository.findOne(id);
 
+    const replyTweet = tweetDB.reply;
+    const tweetUser = tweetDB.id.toString();
     if (tweetDB.reply) {
-      const replyTweet = tweetDB.reply;
-      const tweetUser = tweetDB.id.toString();
-
       console.log("REPLY TWEET : " + replyTweet);
       const tweet = await tweetsRepository.findOne(replyTweet);
       const tweetLowerList = tweet.lowerTweets.filter(
@@ -70,32 +69,36 @@ export const getDeleteTweet = async (
         },
         { upsert: true }
       );
-
-      // User
-      const userRepository = getMongoRepository(User);
-      const userDB = await userRepository.findOne(res.locals.loggedInUser.id);
-      console.log(userDB);
-      const userTweetList = userDB.tweets.filter(
-        (target) => target !== tweetUser
-      );
-
+    }
+    // User Tweet
+    const userRepository = getMongoRepository(User);
+    const userDB = await userRepository.findOne(
+      ObjectId(res.locals.loggedInUser.id)
+    );
+    // [Object Object] 오류로 인해 우회로 방법을 씀.
+    const userTweetList = userDB.tweets.filter(
+      (target) => target !== tweetUser
+    );
+    console.log(userTweetList);
+    const userTweetList1 = userTweetList.filter(
+      (target) => target === tweetUser
+    );
+    console.log(userTweetList1);
+    await userRepository.findOneAndUpdate(
+      { _id: ObjectId(res.locals.loggedInUser.id) },
+      { $inc: { tweetCount: -1 }, $set: { tweets: userTweetList1 } },
+      { upsert: true }
+    );
+    // User Like
+    const isUserLike = userDB.likes.filter((target) => target === id);
+    if (isUserLike.length !== 0) {
+      const UserLikeList = userDB.likes.filter((target) => target !== id);
       await userRepository.findOneAndUpdate(
         { _id: ObjectId(res.locals.loggedInUser.id) },
-        { $inc: { tweetCount: -1 }, $set: { tweets: userTweetList } },
+        { $inc: { likeCount: -1 }, $set: { likes: UserLikeList } },
         { upsert: true }
       );
-
-      const isUserLike = userDB.likes.filter((target) => target == id);
-      if (isUserLike) {
-        const UserLikeList = userDB.likes.filter((target) => target !== id);
-        await userRepository.findOneAndUpdate(
-          { _id: ObjectId(res.locals.loggedInUser.id) },
-          { $inc: { likeCount: -1 }, $set: { likes: UserLikeList } },
-          { upsert: true }
-        );
-      }
     }
-    console.log("삭제중");
     await tweetsRepository.findOneAndDelete({ _id: ObjectId(id) });
 
     return res.redirect(routes.home);

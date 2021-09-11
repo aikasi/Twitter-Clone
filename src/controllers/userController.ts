@@ -101,6 +101,10 @@ export const postJoin = async (
     const exUser = new User();
     exUser.email = email;
     exUser.role = Login.LOCAL;
+    exUser.tweets = [];
+    exUser.tweetCount = 0;
+    exUser.likeCount = 0;
+    exUser.likes = [];
     const hash = await bcrypt.hash(password, 7);
     exUser.password = hash;
     await getMongoManager().save(exUser);

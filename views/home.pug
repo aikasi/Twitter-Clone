@@ -36,6 +36,9 @@ block content
                             if (index + 1)  > (user.likes.length - 1)
                                 div
                                     button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요
+                        else
+                            div
+                                button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요
                     else 
                         div
                             button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요

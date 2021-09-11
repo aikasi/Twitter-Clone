@@ -33,6 +33,9 @@ block content
                             if  (index + 1)  > (loggedInUser.likes.length - 1)
                                 div
                                     button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
+                        else 
+                            div
+                                button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
                     else 
                         div
                             button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
@@ -42,6 +45,4 @@ block content
             div
                 a(href=routes.tweetDelete(tweet.id)) 삭제
                 
-            +tweetCreateBlock({
-                url: routes.tweetReply(tweet.id)
-            })
+            +tweetCreateBlock({url: routes.tweetReply(tweet.id)})
