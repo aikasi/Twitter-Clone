@@ -1,6 +1,8 @@
 extends base.pug
 
 block content
+    if errorMessage 
+        span=errorMessage
     form(action="/login" method="POST")
         div
             label  휴대폰, 이메일, 사용자 아이디

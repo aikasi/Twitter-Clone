@@ -105,24 +105,28 @@ export const postLogin = async (
   res: Response,
   next: NextFunction
 ) => {
-  passport.authenticate("local", (error, user, info) => {
-    if (error) {
-      const message = `PssportLogin Error 1 :  ${error}`;
-      return res.render("error", { error: message });
-    }
+  try {
+    const {
+      body: { email, password },
+    } = req;
+    const UserRepository = getMongoRepository(User);
+    const user = await UserRepository.findOne({ email });
     if (!user) {
-      console.log(user, info);
-      const message = `PssportLogin Error user :  ${error}`;
-      return res.render("error", { error: message });
+      return res.status(400).render("login", {
+        errorMessage: "email을 가진 유저가 존재하지 않습니다.",
+      });
     }
-    return req.login(user, (error) => {
-      if (error) {
-        const message = `PssportLogin Error 2 :  ${error}`;
-        return res.render("error", { error: message });
-      }
-      res.redirect(routes.home);
-    });
-  })(req, res, next);
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) {
+      return res.status(400).render("login", {
+        errorMessage: "잘못된 비밀번호입니다.",
+      });
+    }
+    console.log("로그인 성공");
+    return res.redirect("/");
+  } catch (error) {
+    console.error("ERROR : " + error);
+  }
 };
 
 export const getTweet = async (

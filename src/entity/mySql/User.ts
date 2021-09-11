@@ -51,7 +51,7 @@ export class User<UserInfo> {
   })
   updateAt: Date;
 
-  @Column({ unique: true })
+  @Column()
   email: string;
 
   @Column()
