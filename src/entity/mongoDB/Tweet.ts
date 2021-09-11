@@ -19,6 +19,7 @@ export interface TweetInfo {
   media?: string;
   reply?: string;
   lowerTweet?: string[];
+  lowerTweetNumber?: number;
   likeNumber?: number;
   likes?: string[];
 }
@@ -51,7 +52,10 @@ export class Tweet<TweetInfo> {
   reply: string;
 
   @Column()
-  lowerTweet: string[];
+  lowerTweetNumber: number;
+
+  @Column()
+  lowerTweets: string[];
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createAt: Date;
