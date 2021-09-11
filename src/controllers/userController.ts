@@ -186,11 +186,9 @@ export const postTweet = async (
 
       const userRepository = getMongoRepository(User);
       await userRepository.findOneAndUpdate(
-        { id: res.locals.loggedInUser.id },
-        {
-          $inc: { tweetCount: 1 },
-          $push: { tweets: tweet.id },
-        }
+        { _id: ObjectId(res.locals.loggedInUser.id) },
+        { $inc: { tweetCount: 1 }, $push: { tweets: tweet.id } },
+        { upsert: true }
       );
 
       res.redirect(routes.home);
