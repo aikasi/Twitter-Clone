@@ -118,6 +118,10 @@ export const postJoin = async (
     exUser.age = 0;
     exUser.profilePhoto = "uploads/defaultProfile.png";
     exUser.selfIntroduction = "";
+    exUser.follow = [];
+    exUser.followNumber = 0;
+    exUser.follwing = [];
+    exUser.follwingNumber = 0;
     const hash = await bcrypt.hash(password, 7);
     exUser.password = hash;
     await getMongoManager().save(exUser);
@@ -273,10 +277,10 @@ export const postProfileEdit = async (
     console.log("ERROR : " + error);
   }
 };
-// firstName
-// lastName
-// nick
-// age
-// headerPhoto
-// profilePhoto
-// selfIntroduction
+export const getUserProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  res.render("userProfile");
+};

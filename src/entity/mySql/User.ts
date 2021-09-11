@@ -31,6 +31,10 @@ export interface UserInfo {
   selfIntroduction?: string;
   likes?: string[];
   likeCount?: number;
+  follow: string[];
+  followNumber: number;
+  follwing: string[];
+  follwingNumber: number;
 }
 
 @Entity()
@@ -89,4 +93,16 @@ export class User<UserInfo> {
 
   @Column({ default: 0 })
   likeCount: number;
+
+  @Column({ nullable: true })
+  follow: string[];
+
+  @Column({ nullable: true })
+  followNumber: number;
+
+  @Column({ nullable: true })
+  follwing: string[];
+
+  @Column({ nullable: true })
+  follwingNumber: number;
 }
