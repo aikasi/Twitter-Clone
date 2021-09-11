@@ -63,51 +63,9 @@ export const localMiddleware = (
 ) => {
   res.locals.siteName = "Project1";
   res.locals.routes = routes;
-  res.locals.loggedUser = req.user || null;
 
-  // res.locals.user = {
-  //   id: 1,
-  //   email: "test@naver.com",
-  //   password: "test123",
-  //   nick: "firstTestAccount",
-  //   tweet: [],
-  //   tweetCount: 0,
-  //   likes: [
-  //     { id: "613b50787b525196a4a7b132", userId: 1 },
-  //     { id: "613b50817b525196a4a7b134", userId: 1 },
-  //     {
-  //       id: "613b508b7b525196a4a7b136",
-  //       userId: 1,
-  //     },
-  //     {
-  //       id: "613b507d7b525196a4a7b133",
-  //       userId: 1,
-  //     },
-  //   ],
-  // };
-  // res.locals.userTwo = {
-  //   id: 2,
-  //   email: "test1@naver.com",
-  //   password: "test123",
-  //   nick: "secondTestAccount",
-  //   tweet: [
-  //     { tweetId: "4" },
-  //     { tweetId: "5" },
-  //     { tweetId: "6" },
-  //     { tweetId: "7" },
-  //   ],
-  //   tweetCount: 4,
-  //   // newDate
-  //   // updateDate
-  //   // firstName
-  //   // lastName
-  //   // age
-  //   // profilePhoto
-  //   // headerPhoto
-  //   // selfIntroduction
-  //   // tweets
-  //   // likes
-  // };
+  res.locals.loggedIn = Boolean(req.session.loogedIn);
+  res.locals.loggInUser = req.session.user;
 
   next();
 };

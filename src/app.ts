@@ -5,6 +5,7 @@ import * as passport from "passport";
 import * as expressSession from "express-session";
 import * as cookieParser from "cookie-parser";
 import * as pug from "pug";
+const MongoStore = require("connect-mongo");
 
 import {
   createConnection,
@@ -36,7 +37,6 @@ const PORT = process.env.PORT || 4000;
 
 const app: express.Application = express();
 passportConfig();
-
 createConnection({
   type: "mongodb",
   host: "localhost",
@@ -56,13 +56,16 @@ createConnection({
     app.use(
       expressSession({
         secret: process.env.COOKIE_SECRET,
-        resave: false,
+        resave: true,
         saveUninitialized: true,
+        store: MongoStore.create({
+          mongoUrl: process.env.MONGOURL,
+        }),
       })
     );
 
-    app.use(passport.initialize());
-    app.use(passport.session());
+    // app.use(passport.initialize());
+    // app.use(passport.session());
 
     app.use(localMiddleware);
     app.use("/uploads", express.static("uploads"));

@@ -8,6 +8,7 @@ import * as bcrypt from "bcrypt";
 import routes from "../../routes";
 import * as fs from "fs";
 import { LowerTweet, LowerTweetInfo } from "../entity/mongoDB/LowerTweet";
+import * as session from "express-session";
 
 const getMongoTweet = async () => {
   const tweetsRepository = getMongoRepository(Tweet);
@@ -15,6 +16,13 @@ const getMongoTweet = async () => {
   // console.log(tweets);
   return tweets;
 };
+
+declare module "express-session" {
+  interface Session {
+    user: any;
+    loogedIn: boolean;
+  }
+}
 
 export const getHome = async (req: Request, res: Response) => {
   try {
@@ -122,6 +130,8 @@ export const postLogin = async (
         errorMessage: "잘못된 비밀번호입니다.",
       });
     }
+    req.session.loogedIn = true;
+    req.session.user = user;
     console.log("로그인 성공");
     return res.redirect("/");
   } catch (error) {
