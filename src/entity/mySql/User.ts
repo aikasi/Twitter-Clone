@@ -8,8 +8,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { UserLike, UserLikeInfo } from "./UserLike";
-import { Info, TweetInfo } from "../mySql/TweetInfo";
 
 export enum Login {
   LOCAL = "LOCAL",
@@ -26,11 +24,13 @@ export interface UserInfo {
   firstName?: string;
   lastName?: string;
   age?: number;
-  tweet?: TweetInfo<Info>[];
+  tweet?: string[];
   tweetCount?: number;
   profilePhoto?: string;
   headerPhoto?: string;
   selfIntroduction?: string;
+  likes?: string[];
+  likeCount?: number;
 }
 
 @Entity()
@@ -78,12 +78,15 @@ export class User<UserInfo> {
   @Column({ nullable: true })
   selfIntroduction: string;
 
-  @OneToMany(() => TweetInfo, (tweetInfo) => tweetInfo.user)
-  tweets: TweetInfo<Info>[];
+  @Column()
+  tweets: string[];
 
-  @OneToMany(() => UserLike, (userlike) => userlike.user)
-  likes: UserLike<UserLikeInfo>[];
-
-  @Column({ nullable: true })
+  @Column({ default: 0 })
   tweetCount: number;
+
+  @Column()
+  likes: string[];
+
+  @Column({ default: 0 })
+  likeCount: number;
 }

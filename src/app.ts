@@ -26,11 +26,7 @@ import { localMiddleware } from "./middleware";
 import routes from "../routes";
 import postRouter from "./routers/postRouter";
 import "dotenv/config";
-import { TweetInfo } from "./entity/mySql/TweetInfo";
-import { Like } from "./entity/mongoDB/Like";
-import { UserLike } from "./entity/mySql/UserLike";
 import apiRouter from "./routers/apiRouter";
-import { LowerTweet } from "./entity/mongoDB/LowerTweet";
 import { join } from "path";
 
 const PORT = process.env.PORT || 4000;
@@ -44,7 +40,7 @@ createConnection({
   database: "project",
   useUnifiedTopology: true,
   useNewUrlParser: true,
-  entities: [Tweet, Like, LowerTweet, User, TweetInfo, UserLike],
+  entities: [Tweet, User],
   synchronize: true,
 })
   .then(async () => {

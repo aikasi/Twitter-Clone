@@ -21,14 +21,19 @@ block content
         div
             button(type='submit')#jsAddAnser 댓글
             div
-                each like, index in user.likes
-                    if like.id == tweet.id 
-                        - var isLike = true
-                    if isLike
-                        div
-                            button(type='submit' class="unlike" value=tweet.id)#jsAddLike.addLike 좋아요 취소
-                        -break
-                    if  (index + 1)  > (user.likes.length - 1)
+                if loggedInUser
+                    if loggedInUser.likes
+                        each like, index in loggedInUser.likes
+                            if like.id == tweet.id 
+                                - var isLike = true
+                            if isLike
+                                div
+                                    button(type='submit' class="unlike" value=tweet.id)#jsAddLike.addLike 좋아요 취소
+                                -break
+                            if  (index + 1)  > (loggedInUser.likes.length - 1)
+                                div
+                                    button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
+                    else 
                         div
                             button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
                 else 

@@ -6,7 +6,6 @@ block content
     p ----------------------------------------------
     
     each tweet in tweets
-
         a(href=routes.tweetDetail(tweet.id))
             div
                 if tweet.reply
@@ -25,16 +24,21 @@ block content
                 button(type='submit')#jsAddAnser 댓글
                 div
                     +tweetCreateBlock({url: routes.tweetReply(tweet.id)})
-                each like, index in user.likes
-                    if like.id == tweet.id 
-                        - var isLike = true
-                    if isLike
+                if user
+                    if user.likes
+                        each like, index in user.likes
+                            if like == tweet.id 
+                                - var isLike = true
+                            if isLike
+                                div
+                                    button(type='submit' class="#{loggedInUser.id} unlike" value=tweet.id)#jsAddLike.addLike 좋아요 취소
+                                -break
+                            if (index + 1)  > (user.likes.length - 1)
+                                div
+                                    button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요
+                    else 
                         div
-                            button(type='submit' class="unlike" value=tweet.id)#jsAddLike.addLike 좋아요 취소
-                        -break
-                    if (index + 1)  > (user.likes.length - 1)
-                        div
-                            button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
+                            button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요
                 else 
                     div
                         button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요

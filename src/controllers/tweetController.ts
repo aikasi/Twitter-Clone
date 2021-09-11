@@ -28,7 +28,7 @@ export const getTweetDetail = async (
   console.log(tweetId);
   const tweetsRepository = getMongoRepository(Tweet);
   const tweet = await tweetsRepository.findOne(tweetId);
-  console.log(tweet.file);
+  // console.log(tweet.file);
   return res.render("tweetDetail", { tweet });
 };
 

@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import { stringify } from "querystring";
 import { getMongoManager, getMongoRepository, ObjectID } from "typeorm";
 import routes from "../../routes";
-import { Like, LikeInfo } from "../entity/mongoDB/Like";
-import { LowerTweet } from "../entity/mongoDB/LowerTweet";
 import { Tweet } from "../entity/mongoDB/Tweet";
+import { User } from "../entity/mySql/User";
+import "../middleware";
 const ObjectId = require("mongodb").ObjectId;
 
 export const getTweetLike = async (
@@ -21,36 +21,40 @@ export const PostTweetLike = async (
   next: NextFunction
 ) => {
   const {
-    body: { tweetId },
+    body: { tweetId, user },
   } = req;
   try {
     const tweetRepository = getMongoRepository(Tweet);
     const [tweet] = await tweetRepository.findByIds([ObjectId(tweetId)]);
 
-    const like = new Like();
-
     // tweet 에 like -> User id로 정보 변경해야함
-    like.userId = res.locals.user.id;
-    await getMongoManager().save(like);
+    console.log("USERINFO : " + res.locals.loggedInUser.id);
 
+    // await getMongoManager().save(like);
+    const id = tweet.id.toString();
     await tweetRepository.findOneAndUpdate(
       { _id: ObjectId(tweetId) },
-      { $inc: { likeNumber: 1 }, $push: { likes: like } },
+
+      {
+        $inc: { likeNumber: 1 },
+        $push: { likes: res.locals.loggedInUser.id },
+      },
       { upsert: true }
     );
-    console.log(tweet);
 
-    // 유저 정보 업뎃
-    // User 에 Like 정보 업데이트
-    console.log(
-      res.locals.user.likes.push({ id: tweet.id, userId: tweet.userId })
+    const userRepository = getMongoRepository(User);
+    await userRepository.findOneAndUpdate(
+      { _id: ObjectId(res.locals.loggedInUser.id) },
+      { $inc: { likeCount: 1 }, $push: { likes: tweetId } },
+      { upsert: true }
     );
-    res.locals.user.likes.push({ id: tweet.id, userId: tweet.userId });
-    console.log("유저 정보 : ");
-    console.log(res.locals.user);
+    // console.log(users);
+    console.log("A");
+
     console.log("좋아요 업데이트 완료");
   } catch (error) {
     console.log("error : " + error);
+    res.status(400).end();
   } finally {
     res.end();
   }
@@ -62,31 +66,34 @@ export const PostTweetLikeCancel = async (
   next: NextFunction
 ) => {
   const {
-    body: { tweetId },
+    body: { tweetId, user },
   } = req;
   try {
     const tweetRepository = getMongoRepository(Tweet);
     const [tweet] = await tweetRepository.findByIds([ObjectId(tweetId)]);
 
-    const likeRepository = getMongoRepository(Like);
-    const likes = await likeRepository.findOneAndDelete({
-      userId: res.locals.user.id,
-    });
-    console.log(likes);
     await tweetRepository.findOneAndUpdate(
       { _id: ObjectId(tweetId) },
+
       {
         $inc: { likeNumber: -1 },
-        $pull: { likes: { userId: res.locals.user.id } },
+        $unset: { likes: res.locals.loggedInUser.id },
       },
       { upsert: true }
     );
-    console.log(tweet);
 
-    // User id로 정보 변경해야함
-    // like.userId = res.locals.user.id;
+    const userRepository = getMongoRepository(User);
 
-    console.log(tweet);
+    await userRepository.findOneAndUpdate(
+      { _id: ObjectId(res.locals.loggedInUser.id) },
+      { $inc: { likeCount: -1 }, $unset: { likes: tweetId } }
+    );
+
+    // await userRepository.findOneAndDelete(
+    //   { id: ObjectId(res.locals.loggedInUser.id) },{
+    //     ${}
+    //   }
+    // );
     console.log("좋아요 업데이트 완료");
 
     // User 에 Like 정보 업데이트
@@ -132,17 +139,17 @@ export const postReply = async (
     const tweetRepository = getMongoRepository(Tweet);
     const [tweet] = await tweetRepository.findByIds([ObjectId(id)]);
 
-    const like = new LowerTweet();
-
     // tweet 에 like -> User id로 정보 변경해야함
-    like.lowerId = ObjectId(tweets.id).toString();
-    like.userId = res.locals.user.id;
-    await getMongoManager().save(like);
+    const like = {
+      lowerId: tweets.id,
+      userId: res.locals.user.id,
+    };
+    // like.lowerId = ObjectId(tweets.id).toString();
+    // like.userId = res.locals.user.id;
 
     await tweetRepository.findOneAndUpdate(
       { _id: ObjectId(tweet.id) },
-      { $push: { lowerTweet: like } },
-      { upsert: true }
+      { $push: { lowerTweet: like } }
     );
     console.log(tweet);
 

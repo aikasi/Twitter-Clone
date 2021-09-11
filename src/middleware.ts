@@ -65,7 +65,7 @@ export const localMiddleware = (
   res.locals.routes = routes;
 
   res.locals.loggedIn = Boolean(req.session.loogedIn);
-  res.locals.loggInUser = req.session.user;
+  res.locals.loggedInUser = req.session.user;
 
   next();
 };

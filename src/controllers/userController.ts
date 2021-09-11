@@ -7,12 +7,13 @@ import * as passport from "passport";
 import * as bcrypt from "bcrypt";
 import routes from "../../routes";
 import * as fs from "fs";
-import { LowerTweet, LowerTweetInfo } from "../entity/mongoDB/LowerTweet";
 import * as session from "express-session";
+
+const ObjectId = require("mongodb").ObjectId;
+
 const getMongoTweet = async () => {
   const tweetsRepository = getMongoRepository(Tweet);
   const tweets = await tweetsRepository.find();
-  // console.log(tweets);
   return tweets;
 };
 
@@ -52,10 +53,20 @@ export const getHome = async (req: Request, res: Response) => {
   }
 
   const tweets = await getMongoTweet();
-  console.log(res.locals.loggedUser);
+  const userRepository = getMongoRepository(User);
+  if (res.locals.loggedIn) {
+    const user = await userRepository.findOne(res.locals.loggedInUser.id);
+    console.log(tweets);
+    console.log(user);
+    return res.render("home", {
+      tweets,
+      user,
+      pageTitle: "Home",
+    });
+  }
+
   return res.render("home", {
     tweets,
-    //  user: res.locals.user,
     pageTitle: "Home",
   });
 };
@@ -153,41 +164,37 @@ export const postTweet = async (
   next: NextFunction
 ) => {
   try {
-    // 실제 유저db 때 사용
-    // const exUser: User<UserInfo> = await getMongoRepository(User).findOne({
-    //   where: { id: req.user.id },
-    // });
-    // if (!exUser) {
-    //   const message = `postPost Error: User Not Found`;
-    //   res.render("error", { error: message });
-    // }
-
-    // 저장
-    const tweet = new Tweet();
-    tweet.userId = res.locals.user.id;
-    tweet.content = req.body.content;
-    tweet.file = req.file ? req.file.path : null;
-    if (tweet.file) {
-      const pathNames = req.file.mimetype.split("/");
-      const pathName = pathNames[0];
-
-      if (pathName === "image") {
-        tweet.media = "image";
-      } else if (pathName === "video") {
-        tweet.media = "video";
+    if (res.locals.loggedIn) {
+      // 저장
+      const tweet = new Tweet();
+      tweet.userId = res.locals.loggedInUser.id;
+      tweet.content = req.body.content;
+      tweet.file = req.file ? req.file.path : null;
+      if (tweet.file) {
+        const pathNames = req.file.mimetype.split("/");
+        const pathName = pathNames[0];
+        if (pathName === "image") {
+          tweet.media = "image";
+        } else if (pathName === "video") {
+          tweet.media = "video";
+        }
+      } else {
+        tweet.media = "default";
       }
-    } else {
-      tweet.media = "default";
-    }
-    await getMongoManager().save(tweet);
-    // user정보 업데이트
-    const userTweet = { tweetId: tweet.id.toString() };
-    res.locals.user.tweet.push(userTweet);
-    res.locals.user.tweetCount += 1;
+      await getMongoManager().save(tweet);
+      // user정보 업데이트
 
-    const tweets = await getMongoTweet();
-    // res.render("home", { tweets, user: res.locals.user, pageTitle: "Home" });
-    res.redirect(routes.home);
+      const userRepository = getMongoRepository(User);
+      await userRepository.findOneAndUpdate(
+        { id: res.locals.loggedInUser.id },
+        {
+          $inc: { tweetCount: 1 },
+          $push: { tweets: tweet.id },
+        }
+      );
+
+      res.redirect(routes.home);
+    }
   } catch (error) {
     const message = "postTweet Error: ?";
     console.error("postTweet Error: " + error);
