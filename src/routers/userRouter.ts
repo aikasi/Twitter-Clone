@@ -8,6 +8,7 @@ import {
   getLogout,
   getProfileEdit,
   postProfileEdit,
+  getUserProfile,
 } from "../controllers/userController";
 import routes from "../../routes";
 import { uploadAvatar } from "../middleware";
@@ -26,5 +27,7 @@ userRouter.get(routes.logout, getLogout);
 
 userRouter.get("/profile/edit", getProfileEdit);
 userRouter.post("/profile/edit", uploadAvatar, postProfileEdit);
+
+userRouter.get("/profile/:id", getUserProfile);
 
 export default userRouter;
