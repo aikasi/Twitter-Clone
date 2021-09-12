@@ -4,14 +4,14 @@ include mixins/tweetMedia
 block content
     div.userProfile_div
         div.userProfile_div_firstdiv
-            if loggedInUser.headerPhoto
-                img(src=loggedInUser.headerPhoto).userProfile_div_firstdiv_header
+            if user.headerPhoto
+                img(src=`/${user.headerPhoto}`).userProfile_div_firstdiv_header
             else
                 div.userProfile_div_firstdiv_header.userProfile_div_firstdiv_back
         div.userProfile_div_seconddiv
             div.userProfile_div_seconddiv_thirdDiv
                 div
-                    img(src=`../${user.profilePhoto}` alt="").userProfileImage
+                    img(src=`/${user.profilePhoto}` alt="").userProfileImage
                 div.userProfile_div_seconddiv_thirdDiv_secondDiv
                     if id === loggedInUser.id 
                         a(href=`/profile/edit`) 프로필 수정 
@@ -46,14 +46,30 @@ block content
     div.userProfile_secondDiv
         nav.userProfile_secondDiv_nav
             ul.userProfile_secondDiv_nav_ul
-                li.userProfile_secondDiv_nav_ul_li
-                    a(href=`/profile/${user.id}`) 트윗
-                li.userProfile_secondDiv_nav_ul_li
-                    a(href=`/profile/${user.id}/with_replies`) 트윗 및 답글
-                li.userProfile_secondDiv_nav_ul_li 
-                    a(href=`/profile/${user.id}/media`) 미디어
-                li.userProfile_secondDiv_nav_ul_li
-                    a(href=`/profile/${user.id}/likes`) 마음에 들어요
+                if tweets
+                    li.userProfile_secondDiv_nav_ul_li.userProfile_secondDiv_nav_ul_active
+                        a(href=`/profile/${user.id}`) 트윗
+                else
+                    li.userProfile_secondDiv_nav_ul_li
+                        a(href=`/profile/${user.id}`) 트윗
+                if tweets1
+                    li.userProfile_secondDiv_nav_ul_li.userProfile_secondDiv_nav_ul_active
+                        a(href=`/profile/${user.id}/with_replies`) 트윗 및 답글
+                else
+                    li.userProfile_secondDiv_nav_ul_li
+                        a(href=`/profile/${user.id}/with_replies`) 트윗 및 답글
+                if tweets2
+                    li.userProfile_secondDiv_nav_ul_li.userProfile_secondDiv_nav_ul_active
+                        a(href=`/profile/${user.id}/media`) 미디어
+                else 
+                    li.userProfile_secondDiv_nav_ul_li 
+                        a(href=`/profile/${user.id}/media`) 미디어
+                if tweets3
+                    li.userProfile_secondDiv_nav_ul_li.userProfile_secondDiv_nav_ul_active
+                        a(href=`/profile/${user.id}/likes`) 마음에 들어요
+                else 
+                    li.userProfile_secondDiv_nav_ul_li
+                        a(href=`/profile/${user.id}/likes`) 마음에 들어요
         div
             if(tweets)
                 each tweet in tweets

@@ -1,10 +1,12 @@
 .tweetCreate {
+  width: 100%;
 }
 .tweetCreateInputBox {
   display: none;
 }
 .tweetCreate_inputText {
   border: none;
+  width: 100%;
   font-size: 22px;
   height: 30px;
   margin-bottom: 15px;
@@ -25,7 +27,7 @@
 .tweetCreate_div_sumit {
   border: none;
   background-color: $sky;
-  width: 90px;
+  width: 20%;
   height: 35px;
   border-radius: 15% / 50%;
 }

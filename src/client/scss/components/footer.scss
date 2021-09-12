@@ -1,9 +1,10 @@
 .footer {
-  width: 100%;
+  width: 24%;
   height: 100%;
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 5px;
+  position: fixed;
 }
 .footer_serchingDiv {
   display: flex;
@@ -123,7 +124,7 @@
   align-items: center;
   background-color: black;
   height: 30px;
-  width: 70px;
+  width: 60px;
   border-radius: 20%/50%;
 }
 .footer_might_Follow_text {
@@ -132,7 +133,7 @@
 .footer_might_user_middle {
   display: flex;
   flex-direction: column;
-  margin-right: 70px;
+  margin-right: 10px;
 }
 .footer_might_footer {
   margin-left: 14px;

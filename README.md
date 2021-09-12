@@ -43,15 +43,16 @@
 ## 해야할것
  - [x] 프로필  
  - [x] 프로필 -> 트윗 및 답글
- - [ ] 프로필 -> 트윗 및 답글 Css
+ - [x] 프로필 -> 트윗 및 답글 Css
  - [x] 프로필 -> 미디어
- - [ ] 프로필 -> 미디어 Css
+ - [x] 프로필 -> 미디어 Css
  - [X] 프로필 -> 마음에 들어요
- - [ ] 프로필 -> 마음에 들어요 Css
+ - [x] 프로필 -> 마음에 들어요 Css
  - [x] footer
  - [x] footer Css
- - [ ] header 고정
- - [ ] footer 고정
+ - [x] header 고정
+ - [x] footer 고정
+ - [ ] tweet Detail Css
 
 
  - [ ] create Tweet Css
