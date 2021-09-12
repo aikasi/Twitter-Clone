@@ -295,23 +295,27 @@ export const getUserProfile = async (
   res: Response,
   next: NextFunction
 ) => {
-  const {
-    params: { id },
-  } = req;
-  const userRepository = getMongoRepository(User);
-  const tweetsRepository = getMongoRepository(Tweet);
-  const userDB = await userRepository.findOne(ObjectId(id));
-  const users = { userDB };
-  const user = users.userDB;
-  const userTweet = user.tweets;
-  const tweets = [];
-  for (const value of userTweet) {
-    const tweetsDB = await tweetsRepository.findOne(value);
-    if (!tweetsDB.reply) {
-      tweets.push(tweetsDB);
+  try {
+    const {
+      params: { id },
+    } = req;
+    const userRepository = getMongoRepository(User);
+    const tweetsRepository = getMongoRepository(Tweet);
+    const userDB = await userRepository.findOne(ObjectId(id));
+    const users = { userDB };
+    const user = users.userDB;
+    const userTweet = user.tweets;
+    const tweets = [];
+    for (const value of userTweet) {
+      const tweetsDB = await tweetsRepository.findOne(value);
+      if (!tweetsDB.reply) {
+        tweets.push(tweetsDB);
+      }
     }
+    res.render("userProfile", { user, id, tweets });
+  } catch (error) {
+    console.log("ERROR : " + error);
   }
-  res.render("userProfile", { user, id, tweets });
 };
 
 export const postUserProfile = async (
@@ -407,9 +411,25 @@ export const getProfileWithReplies = async (
   res: Response,
   next: NextFunction
 ) => {
-  const {
-    params: { id },
-  } = req;
+  try {
+    const {
+      params: { id },
+    } = req;
+    const userRepository = getMongoRepository(User);
+    const tweetsRepository = getMongoRepository(Tweet);
+    const userDB = await userRepository.findOne(ObjectId(id));
+    const users = { userDB };
+    const user = users.userDB;
+    const userTweet = user.tweets;
+    const tweets = [];
+    for (const value of userTweet) {
+      const tweetsDB = await tweetsRepository.findOne(value);
+      tweets.push(tweetsDB);
+    }
+    res.render("userProfile", { user, id, tweets1: tweets });
+  } catch (error) {
+    console.log("ERROR : " + error);
+  }
 };
 export const getProfileMedia = async (
   req: Request,

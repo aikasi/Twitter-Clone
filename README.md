@@ -42,16 +42,17 @@
 
 ## 해야할것
  - [x] 프로필  
- - [ ] 트윗 및 답글
- - [ ] 트윗 및 답글 Css
- - [ ] 미디어
- - [ ] 미디어 Css
- - [ ] 마음에 들어요
- - [ ] 마음에 들어요 Css
+ - [x] 프로필 -> 트윗 및 답글
+ - [ ] 프로필 -> 트윗 및 답글 Css
+ - [ ] 프로필 -> 미디어
+ - [ ] 프로필 -> 미디어 Css
+ - [ ] 프로필 -> 마음에 들어요
+ - [ ] 프로필 -> 마음에 들어요 Css
  - [ ] footer
  - [ ] footer Css
- - [ ] header 바
- - [ ] header 바 Css
+ - [ ] header 고정
+ - [ ] footer 고정
+
 
  - [ ] create Tweet Css
  - [ ] reply Tweet Css
