@@ -192,6 +192,11 @@ export const postTweet = async (
       tweet.userId = res.locals.loggedInUser.id;
       tweet.content = req.body.content;
       tweet.file = req.file ? req.file.path : null;
+      tweet.likeNumber = 0;
+      tweet.lowerTweetNumber = 0;
+      tweet.lowerTweetNumber = 0;
+      tweet.likes = [];
+      tweet.lowerTweets = [];
       if (tweet.file) {
         const pathNames = req.file.mimetype.split("/");
         const pathName = pathNames[0];

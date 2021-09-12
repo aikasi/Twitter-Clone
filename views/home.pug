@@ -2,9 +2,6 @@ extends base.pug
 include mixins/tweetCreateBlock
 
 block content
-    h3 Tweet
-    p ----------------------------------------------
-    
     each tweet in tweets
         a(href=routes.tweetDetail(tweet.id))
             div
@@ -21,7 +18,9 @@ block content
                         div  
                             video(src=tweet.file alt=tweet.file controls=true) 
             div
-                button(type='submit')#jsAddAnser 댓글
+                div
+                    button(type='submit')#jsAddAnser 댓글
+                    span=tweet.lowerTweetNumber
                 div
                     +tweetCreateBlock({url: routes.tweetReply(tweet.id)})
                 if user
@@ -32,22 +31,26 @@ block content
                             if isLike
                                 div
                                     button(type='submit' class="#{loggedInUser.id} unlike" value=tweet.id)#jsAddLike.addLike 좋아요 취소
+                                    span=tweet.likeNumber
                                 -break
                             if (index + 1)  > (user.likes.length - 1)
                                 div
                                     button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요
+                                    span=tweet.likeNumber
                         else
                             div
-                                button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요
+                                button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요#{tweet.likeCount}
+                                span=tweet.likeNumber
                     else 
                         div
-                            button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요
+                            button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요#{tweet.likeCount}
+                            span=tweet.likeNumber
                 else 
                     div
-                        button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
+                        button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요 #{tweet.likeCount}
+                        span=tweet.likeNumber
                 div
                     a(href=routes.tweetDelete(tweet.id)) 삭제 
-                p -----------------------------------------------
     
 
     a(href=`${routes.tweet}${routes.tweetCreate}`) Tweet

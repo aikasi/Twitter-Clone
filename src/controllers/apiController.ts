@@ -120,6 +120,10 @@ export const postReply = async (
     tweets.content = req.body.content;
     tweets.reply = id;
     tweets.file = req.file ? req.file.path : null;
+    tweets.likeNumber = 0;
+    tweets.lowerTweetNumber = 0;
+    tweets.likes = [];
+    tweets.lowerTweets = [];
     if (tweets.file) {
       const pathNames = req.file.mimetype.split("/");
       const pathName = pathNames[0];
