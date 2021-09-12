@@ -52,10 +52,9 @@
  - [x] footer Css
  - [x] header 고정
  - [x] footer 고정
- - [ ] tweet Detail Css
+ - [x] tweet Detail Css
 
-
- - [ ] create Tweet Css
- - [ ] reply Tweet Css
+ - [x] create Tweet Css
+ - [x] reply Tweet Css
  - [ ] profile 날짜 추가
  - [ ] tweet 날짜 추가

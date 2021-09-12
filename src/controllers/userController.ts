@@ -407,6 +407,7 @@ export const postUserFollowCancel = async (
   return res.redirect(`/profile/${id}`);
 };
 
+// profile nav 종류
 export const getProfileWithReplies = async (
   req: Request,
   res: Response,

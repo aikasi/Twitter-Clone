@@ -1,8 +1,9 @@
 extends base.pug
 include mixins/tweetCreateBlock
+include mixins/tweetMedia
 
 block content 
-    p reply #{id}
+    +tweetMediaBlock({tweet:tweet})
     +tweetCreateBlock({
         url: `${routes.tweetReply(id)}`
     })

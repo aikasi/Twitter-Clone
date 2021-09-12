@@ -1,48 +1,9 @@
 extends base.pug
 include mixins/tweetCreateBlock
+include mixins/tweetMedia
 
 block content
-    div
-        div
-            h1=tweet.id
-        div
-            if tweet.reply
-                    p reply for : `#{tweet.reply}`
-            h3 tweet ID : #{tweet.id}
-            if tweet.content
-                h4 Content : #{tweet.content}
-            if tweet.file
-                if tweet.media === "image"
-                    div
-                        img(src=`/${tweet.file}` alt=tweet.file)
-                else if tweet.media === "video"
-                    div  
-                        video(src=`/${tweet.file}` alt=tweet.file controls=true) 
-        div
-            button(type='submit')#jsAddAnser 댓글
-            div
-                if loggedInUser
-                    if loggedInUser.likes
-                        each like, index in loggedInUser.likes
-                            if like.id == tweet.id 
-                                - var isLike = true
-                            if isLike
-                                div
-                                    button(type='submit' class="unlike" value=tweet.id)#jsAddLike.addLike 좋아요 취소
-                                -break
-                            if  (index + 1)  > (loggedInUser.likes.length - 1)
-                                div
-                                    button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
-                        else 
-                            div
-                                button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
-                    else 
-                        div
-                            button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
-                else 
-                    div
-                        button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요
-            div
-                a(href=routes.tweetDelete(tweet.id)) 삭제
-                
-            +tweetCreateBlock({url: routes.tweetReply(tweet.id)})
+    +tweetMediaBlock({tweet:tweet})
+    +tweetCreateBlock({url: routes.tweetReply(tweet.id)})
+    each tweets in lowerTweets
+        +tweetMediaBlock({tweet:tweets})

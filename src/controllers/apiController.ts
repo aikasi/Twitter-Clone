@@ -10,6 +10,7 @@ import routes from "../../routes";
 import { Tweet } from "../entity/mongoDB/Tweet";
 import { User } from "../entity/mySql/User";
 import "../middleware";
+import { isLoggedIn } from "../middleware";
 const ObjectId = require("mongodb").ObjectId;
 
 export const getTweetLike = async (
@@ -74,36 +75,38 @@ export const PostTweetLikeCancel = async (
     body: { tweetId, user },
   } = req;
   try {
-    const tweetRepository = getMongoRepository(Tweet);
-    const [tweet] = await tweetRepository.findByIds([ObjectId(tweetId)]);
+    if (res.locals.isLoggedIn) {
+      const tweetRepository = getMongoRepository(Tweet);
+      const [tweet] = await tweetRepository.findByIds([ObjectId(tweetId)]);
 
-    // Tweet
-    const tweetDB = await tweetRepository.findOne(tweetId);
-    const tweetLikeList = tweetDB.likes.filter(
-      (target) => target !== res.locals.loggedInUser.id
-    );
-    await tweetRepository.findOneAndUpdate(
-      { _id: ObjectId(tweetId) },
+      // Tweet
+      const tweetDB = await tweetRepository.findOne(tweetId);
+      const tweetLikeList = tweetDB.likes.filter(
+        (target) => target !== res.locals.loggedInUser.id
+      );
+      await tweetRepository.findOneAndUpdate(
+        { _id: ObjectId(tweetId) },
 
-      {
-        $inc: { likeNumber: -1 },
-        $set: { likes: tweetLikeList },
-      },
-      { upsert: true }
-    );
+        {
+          $inc: { likeNumber: -1 },
+          $set: { likes: tweetLikeList },
+        },
+        { upsert: true }
+      );
 
-    // User
-    const userRepository = getMongoRepository(User);
-    const userDB = await userRepository.findOne(res.locals.loggedInUser.id);
-    const userLikeList = userDB.likes.filter((target) => target !== tweetId);
-    await userRepository.findOneAndUpdate(
-      { _id: ObjectId(res.locals.loggedInUser.id) },
-      { $inc: { likeCount: -1 }, $set: { likes: userLikeList } }
-    );
+      // User
+      const userRepository = getMongoRepository(User);
+      const userDB = await userRepository.findOne(res.locals.loggedInUser.id);
+      const userLikeList = userDB.likes.filter((target) => target !== tweetId);
+      await userRepository.findOneAndUpdate(
+        { _id: ObjectId(res.locals.loggedInUser.id) },
+        { $inc: { likeCount: -1 }, $set: { likes: userLikeList } }
+      );
 
-    console.log("좋아요 업데이트 완료");
+      console.log("좋아요 업데이트 완료");
 
-    // User 에 Like 정보 업데이트
+      // User 에 Like 정보 업데이트
+    }
   } catch (error) {
     console.log("error : " + error);
   } finally {
@@ -119,8 +122,10 @@ export const getReply = async (
   const {
     params: { id },
   } = req;
-
-  res.render("tweetReply", { id });
+  const tweetRepository = getMongoRepository(Tweet);
+  const tweet = await tweetRepository.findOne(id);
+  console.log(tweet);
+  res.render("tweetReply", { id, tweet });
 };
 
 export const postReply = async (

@@ -29,8 +29,14 @@ export const getTweetDetail = async (
   console.log(tweetId);
   const tweetsRepository = getMongoRepository(Tweet);
   const tweet = await tweetsRepository.findOne(tweetId);
-  // console.log(tweet.file);
-  return res.render("tweetDetail", { tweet });
+  const lowerTweetsDB = tweet.lowerTweets;
+  const lowerTweets = [];
+  for (const value of lowerTweetsDB) {
+    const tweetsDB = await tweetsRepository.findOne(value);
+    lowerTweets.push(tweetsDB);
+  }
+  console.log(lowerTweets);
+  return res.render("tweetDetail", { tweet, lowerTweets });
 };
 
 export const postDeleteTweet = async (
