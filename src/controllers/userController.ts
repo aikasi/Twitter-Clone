@@ -207,6 +207,7 @@ export const postTweet = async (
       if (tweet.file) {
         const pathNames = req.file.mimetype.split("/");
         const pathName = pathNames[0];
+        console.log(pathName);
         if (pathName === "image") {
           tweet.media = "image";
         } else if (pathName === "video") {
@@ -436,16 +437,52 @@ export const getProfileMedia = async (
   res: Response,
   next: NextFunction
 ) => {
-  const {
-    params: { id },
-  } = req;
+  try {
+    const {
+      params: { id },
+    } = req;
+    const userRepository = getMongoRepository(User);
+    const tweetsRepository = getMongoRepository(Tweet);
+    const userDB = await userRepository.findOne(ObjectId(id));
+    const users = { userDB };
+    const user = users.userDB;
+    const userTweet = user.tweets;
+    const tweets = [];
+    for (const value of userTweet) {
+      const tweetsDB = await tweetsRepository.findOne(value);
+      if (tweetsDB.media === "video") {
+        tweets.push(tweetsDB);
+      }
+    }
+    console.log(tweets);
+    res.render("userProfile", { user, id, tweets2: tweets });
+  } catch (error) {
+    console.log("ERROR : " + error);
+  }
 };
 export const getProfilelikes = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const {
-    params: { id },
-  } = req;
+  try {
+    const {
+      params: { id },
+    } = req;
+    const userRepository = getMongoRepository(User);
+    const tweetsRepository = getMongoRepository(Tweet);
+    const userDB = await userRepository.findOne(ObjectId(id));
+    const users = { userDB };
+    const user = users.userDB;
+    const userTweet = user.likes;
+    const tweets = [];
+    for (const value of userTweet) {
+      const tweetsDB = await tweetsRepository.findOne(value);
+      tweets.push(tweetsDB);
+    }
+    console.log(tweets);
+    res.render("userProfile", { user, id, tweets3: tweets });
+  } catch (error) {
+    console.log("ERROR : " + error);
+  }
 };
