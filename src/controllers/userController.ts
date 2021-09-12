@@ -122,6 +122,7 @@ export const postJoin = async (
     exUser.followNumber = 0;
     exUser.follwing = [];
     exUser.follwingNumber = 0;
+    exUser.mainTweet = "";
     const hash = await bcrypt.hash(password, 7);
     exUser.password = hash;
     await getMongoManager().save(exUser);
@@ -282,5 +283,99 @@ export const getUserProfile = async (
   res: Response,
   next: NextFunction
 ) => {
-  res.render("userProfile");
+  const {
+    params: { id },
+  } = req;
+  const userRepository = getMongoRepository(User);
+  const user = await userRepository.findOne(id);
+  console.log(user);
+  res.render("userProfile", { user, id });
+};
+
+export const postUserProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {
+    params: { id },
+  } = req;
+  const userRepository = getMongoRepository(User);
+  const myUserDB = await userRepository.findOne(
+    ObjectId(res.locals.loggedInUser.id)
+  );
+  const myUser = Object.assign(myUserDB);
+
+  const profileUserDB = await userRepository.findOne(ObjectId(id));
+  const profileUser = Object.assign(profileUserDB);
+
+  // 팔로우
+  await userRepository.findOneAndUpdate(
+    { _id: ObjectId(res.locals.loggedInUser.id) },
+    {
+      $inc: { followNumber: 1 },
+      $push: { follow: id },
+    },
+    { upsert: true }
+  );
+
+  // 팔로워
+  await userRepository.findOneAndUpdate(
+    { _id: ObjectId(id) },
+    {
+      $inc: { follwingNumber: 1 },
+      $push: { follwing: res.locals.loggedInUser.id },
+    }
+  );
+  return res.redirect(`/profile/${id}`);
+};
+
+export const postUserFollowCancel = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {
+    params: { id },
+  } = req;
+  const userRepository = getMongoRepository(User);
+  const myUserDB = await userRepository.findOne(
+    ObjectId(res.locals.loggedInUser.id)
+  );
+  const myUser = Object.assign(myUserDB);
+
+  const profileUserDB = await userRepository.findOne(ObjectId(id));
+  const profileUser = Object.assign(profileUserDB);
+
+  // 팔로우 login 유저
+  const userDB = await userRepository.findOne(ObjectId(myUser.id));
+  const userFollowList = userDB.follow.filter(
+    (target) => target !== profileUser
+  );
+  await userRepository.findOneAndUpdate(
+    { _id: ObjectId(res.locals.loggedInUser.id) },
+    {
+      $inc: { followNumber: -1 },
+      $set: { follow: userFollowList },
+    },
+    { upsert: true }
+  );
+
+  // 팔로워 profile 유저
+  const profileUserRepository = await userRepository.findOne(
+    ObjectId(profileUser.id)
+  );
+  const profileUserFollowList = profileUserRepository.follow.filter(
+    (target) => target !== myUser.id
+  );
+
+  await userRepository.findOneAndUpdate(
+    { _id: ObjectId(id) },
+    {
+      $inc: { follwingNumber: -1 },
+      $push: { follwing: profileUserFollowList },
+    }
+  );
+
+  return res.redirect(`/profile/${id}`);
 };

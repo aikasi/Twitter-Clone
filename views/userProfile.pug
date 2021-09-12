@@ -1,4 +1,44 @@
 extends base.pug
 
 block content
-    
+    div
+        div
+            img(src=user.headerPhoto alt="")
+        div
+            div 
+                img(src=user.headerPhoto alt="")
+                span #{user.lastName} #{user.firstName}
+                div 
+                    span #{user.nick}
+                    span #{user.selfIntroduction}
+                    span #{user.createAt}
+                    div
+                        a(href="#") #{user.followNumber} 팔로우 중
+                        a(href="#") #{user.follwingNumber} 팔로워
+            div
+                if id === loggedInUser.id 
+                    a(href=`/profile/${loggedInUser.id}`) 프로필 수정 
+                else 
+                    each item in user.follow
+                        if item === id
+                            form(action=`/profile/${id}/cancel` method="POST") 
+                                input(type="submit" value="팔로우 취소")
+                            -break
+                    else 
+                        form(method="POST") 
+                            input(type="submit" value="팔로우")
+    div         
+        nav
+            ul
+                li
+                    a(href="#") 트윗
+                    block tweet
+                li 
+                    a(href="#") 트윗 및 답글
+                    block tweet
+                li 
+                    a(href="#") 미디어
+                    block tweet
+                li
+                    a(href="#") 마음에 들어요
+                    block tweet

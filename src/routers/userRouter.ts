@@ -9,6 +9,8 @@ import {
   getProfileEdit,
   postProfileEdit,
   getUserProfile,
+  postUserProfile,
+  postUserFollowCancel,
 } from "../controllers/userController";
 import routes from "../../routes";
 import { uploadAvatar } from "../middleware";
@@ -29,5 +31,8 @@ userRouter.get("/profile/edit", getProfileEdit);
 userRouter.post("/profile/edit", uploadAvatar, postProfileEdit);
 
 userRouter.get("/profile/:id", getUserProfile);
+userRouter.post("/profile/:id", postUserProfile);
+
+userRouter.post("/profile/:id/cancel", postUserFollowCancel);
 
 export default userRouter;

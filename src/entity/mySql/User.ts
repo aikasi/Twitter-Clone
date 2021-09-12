@@ -24,6 +24,7 @@ export interface UserInfo {
   firstName?: string;
   lastName?: string;
   age?: number;
+  mainTweet?: string;
   tweet?: string[];
   tweetCount?: number;
   profilePhoto?: string;
@@ -105,4 +106,7 @@ export class User<UserInfo> {
 
   @Column({ nullable: true })
   follwingNumber: number;
+
+  @Column({ nullable: true })
+  mainTweet: string;
 }
