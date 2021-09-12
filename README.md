@@ -48,11 +48,13 @@
  - [ ] 프로필 -> 미디어 Css
  - [X] 프로필 -> 마음에 들어요
  - [ ] 프로필 -> 마음에 들어요 Css
- - [ ] footer
- - [ ] footer Css
+ - [x] footer
+ - [x] footer Css
  - [ ] header 고정
  - [ ] footer 고정
 
 
  - [ ] create Tweet Css
  - [ ] reply Tweet Css
+ - [ ] profile 날짜 추가
+ - [ ] tweet 날짜 추가
