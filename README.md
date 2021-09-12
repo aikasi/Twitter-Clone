@@ -24,7 +24,6 @@
  - [x] 팔로우
  - [x] 팔로워
  - [x] 트윗
- - [ ] 메인트윗
  - [x] 수정
 
  ## 트윗 Model
@@ -56,5 +55,3 @@
 
  - [x] create Tweet Css
  - [x] reply Tweet Css
- - [ ] profile 날짜 추가
- - [ ] tweet 날짜 추가
