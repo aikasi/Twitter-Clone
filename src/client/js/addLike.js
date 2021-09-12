@@ -41,12 +41,10 @@ const handleLikeClick = async (event) => {
   console.log(user);
   let result = likeList.toggle("unlike");
   if (result) {
-    event.target.innerText = "좋아요 취소";
-    console.log("A");
+    likeList.replace("far", "fas");
     sendLike(tweetId, user);
   } else {
-    event.target.innerText = "좋아요";
-    console.log("B");
+    likeList.replace("fas", "far");
     sendLikeCancel(tweetId, user);
   }
 };

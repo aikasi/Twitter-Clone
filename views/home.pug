@@ -1,56 +1,22 @@
 extends base.pug
 include mixins/tweetCreateBlock
+include mixins/tweetMedia
+include mixins/tweet
 
 block content
+    div.homeMiddle
+        div.homeMiddle_Header
+            div.homeMiddle_Header_Block
+                h3.homeText Home
+                i.fas.fa-star.homeText
+        div.homeMiddle_createTweet
+            if loggedIn
+                div
+                    img(src=loggedInUser.profilePhoto, alt="").image
+                div.homeMiddle_createTweet_Block
+                    +tweetCreateBlock({
+                        url : "/tweet/create"
+                    })
     each tweet in tweets
-        a(href=routes.tweetDetail(tweet.id))
-            div
-                if tweet.reply
-                    p reply for : #{tweet.reply}
-                h3 tweet ID : #{tweet.id}
-                if tweet.content
-                    h4 Content : #{tweet.content}
-                if tweet.file
-                    if tweet.media === "image"
-                        div
-                            img(src=tweet.file alt=tweet.file)
-                    else if tweet.media === "video"
-                        div  
-                            video(src=tweet.file alt=tweet.file controls=true) 
-            div
-                div
-                    button(type='submit')#jsAddAnser 댓글
-                    span=tweet.lowerTweetNumber
-                div
-                    +tweetCreateBlock({url: routes.tweetReply(tweet.id)})
-                if user
-                    if user.likes
-                        each like, index in user.likes
-                            if like == tweet.id 
-                                - var isLike = true
-                            if isLike
-                                div
-                                    button(type='submit' class="#{loggedInUser.id} unlike" value=tweet.id)#jsAddLike.addLike 좋아요 취소
-                                    span=tweet.likeNumber
-                                -break
-                            if (index + 1)  > (user.likes.length - 1)
-                                div
-                                    button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요
-                                    span=tweet.likeNumber
-                        else
-                            div
-                                button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요#{tweet.likeCount}
-                                span=tweet.likeNumber
-                    else 
-                        div
-                            button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요#{tweet.likeCount}
-                            span=tweet.likeNumber
-                else 
-                    div
-                        button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요 #{tweet.likeCount}
-                        span=tweet.likeNumber
-                div
-                    a(href=routes.tweetDelete(tweet.id)) 삭제 
-    
-
-    a(href=`${routes.tweet}${routes.tweetCreate}`) Tweet
+        +tweetMediaBlock({tweet:tweet})
+        

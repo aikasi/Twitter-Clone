@@ -1,6 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { stringify } from "querystring";
-import { getMongoManager, getMongoRepository, ObjectID } from "typeorm";
+import {
+  getMongoManager,
+  getMongoRepository,
+  MongoRepository,
+  ObjectID,
+} from "typeorm";
 import routes from "../../routes";
 import { Tweet } from "../entity/mongoDB/Tweet";
 import { User } from "../entity/mySql/User";
@@ -106,6 +111,18 @@ export const PostTweetLikeCancel = async (
   }
 };
 
+export const getReply = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {
+    params: { id },
+  } = req;
+
+  res.render("tweetReply", { id });
+};
+
 export const postReply = async (
   req: Request,
   res: Response,
@@ -114,6 +131,7 @@ export const postReply = async (
   const {
     params: { id },
   } = req;
+
   try {
     const tweets = new Tweet();
     tweets.userId = res.locals.loggedInUser.id;
@@ -124,6 +142,9 @@ export const postReply = async (
     tweets.lowerTweetNumber = 0;
     tweets.likes = [];
     tweets.lowerTweets = [];
+    tweets.firstName = res.locals.loggedInUser.firstName;
+    tweets.lastName = res.locals.loggedInUser.lastName;
+    tweets.tweetUserAvata = res.locals.loggedInUser.profilePhoto;
     if (tweets.file) {
       const pathNames = req.file.mimetype.split("/");
       const pathName = pathNames[0];

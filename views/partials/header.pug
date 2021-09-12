@@ -1,0 +1,27 @@
+header.containermenu
+    div.containerdiv
+        div.contantner.menu
+            div.divBox
+                a(href="/").linkMenu.fab.fa-twitter
+            if loggedIn
+                div.divBox
+                    a(href="/").linkMenu
+                        i.fas.fa-house-user
+                        span.spanMenu 홈
+                div.divBox
+                    a(href=`/profile/${loggedInUser.id}`).linkMenu
+                        <i class="fas fa-user"></i>
+                        span.spanMenu 프로필
+                div.box
+                    div.lastTweet.divBox
+                        a(href=`${routes.tweet}${routes.tweetCreate}`) 트윗하기
+            else
+                div.secondDivBox
+                    a(href="#").SecondLinkMenu1.fas.fa-hashtag 탐색하기
+                    a(href="#").SecondLinkMenu2.linkMenu 설정
+        div.contantner.logged.lastitem
+            div.loggedBox
+                if loggedIn
+                    a(href="/join").linkMenuLogged 로그아웃
+                else
+                    a(href="/login").linkMenuLogged 로그인 

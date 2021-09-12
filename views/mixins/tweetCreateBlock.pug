@@ -1,7 +1,7 @@
 mixin tweetCreateBlock(tweet = {})
-    form(action=tweet.url method="POST" enctype="multipart/form-data")
-        input(type="text" name="content" placeholder = "What's happening?")
-        div
-            label(for="file") Tweet File 
-            input(type="file" id="tweetFile" name="tweetFile" accept="video/*,image/*")
-        input(type="submit", value="Tweet")
+    form(action=tweet.url method="POST" enctype="multipart/form-data").tweetCreate
+        textarea(name="content" cols="30" rows="10").tweetCreate_inputText
+        div.tweetCreate_div
+            label(for="tweetFile").far.fa-image.tweetCreate_div_file
+                input(type="file" id="tweetFile" name="tweetFile" accept="video/*,image/*").tweetCreateInputBox
+            input(type="submit", value="Tweet").tweetCreate_div_sumit

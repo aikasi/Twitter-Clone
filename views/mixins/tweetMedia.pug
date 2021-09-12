@@ -1,0 +1,57 @@
+mixin tweetMediaBlock({tweet})
+    div.firstContainer
+        div.secondContainer
+            img(src=`/${tweet.tweetUserAvata}`).image
+        div.secondContainer
+            div.thirdContainer
+                div.thirdFirstContainer
+                    //- h3 #{loggedInUser.firstName}#{loggedInUser.lastName}
+                    h3 제목
+                    h3 닉네임
+                div.thirdSecondContainer
+                    if tweet.content
+                        div.content
+                            h4 #{tweet.content}
+                    if tweet.file
+                        div
+                            if tweet.media === "image"
+                                div.imageBox.picture
+                                    img(src=`/${tweet.file}` alt=tweet.file).image2
+                            else if tweet.media === "video"
+                                div.imageBox  
+                                    video(src=`/${tweet.file}` alt=tweet.file controls=true).video
+                div.thirdThirdContainer
+                    div.tweetMedia_reply.thirdThirdContainer_div
+                        a(href=routes.tweetReply(tweet.id))#jsAddAnser.thirdThirdContainer_div_commit
+                            span 댓글 #{tweet.lowerTweetNumber}
+                    div.thirdThirdContainer_div
+                        if user
+                            if user.likes
+                                each like, index in user.likes
+                                    if like == tweet.id 
+                                        - var isLike = true
+                                    if isLike
+                                        div.thirdThirdContainer_div_box
+                                            button(type='submit' class=`${loggedInUser.id} unlike` value=tweet.id)#jsAddLike.addLike.thirdThirdContainer_div_box_like.fas.fa-heart 
+                                                span=tweet.likeNumber
+                                        -break
+                                    if (index + 1)  > (user.likes.length - 1)
+                                        div.thirdThirdContainer_div_box
+                                            button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike.thirdThirdContainer_div_box_like.far.fa-heart
+                                                span=tweet.likeNumber
+                                else
+                                    div.thirdThirdContainer_div_box
+                                        button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike.thirdThirdContainer_div_box_like.far.fa-heart 
+                                            span=tweet.likeNumber
+                            else 
+                                div.thirdThirdContainer_div_box
+                                    button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike.thirdThirdContainer_div_box_like.far.fa-heart 
+                                        span=tweet.likeNumber
+                        else 
+                            div.thirdThirdContainer_div_box
+                                button(type='submit' value=tweet.id)#jsAddLike.addLike.thirdThirdContainer_div_box_like.far.fa-heart 
+                                    span=tweet.likeNumber
+                    div.thirdThirdContainer_div
+                        a(href=routes.tweetDelete(tweet.id)).thirdThirdContainer_div_Delete 삭제 
+                    div.thirdThirdContainer_div
+                        a(href="#").thirdThirdContainer_div_shard 공유

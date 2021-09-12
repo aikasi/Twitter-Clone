@@ -1,0 +1,74 @@
+.firstContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  border-bottom: 1px solid black;
+  margin-top: 5px;
+}
+.image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50% / 50%;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-bottom: 30px;
+}
+.secondContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  &:last-child {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+  }
+}
+.thirdContainer {
+  width: 100%;
+}
+.thirdFirstContainer {
+  display: flex;
+  margin-bottom: 10px;
+}
+.thirdSecondContainer {
+  margin-bottom: 10px;
+}
+.imageBox {
+  width: 100%;
+  height: 100%;
+}
+.image2 {
+  width: 100%;
+  height: 250px;
+  border-radius: 5%;
+  object-fit: cover;
+}
+.video {
+  width: 100%;
+  height: 280px;
+  object-fit: contain;
+}
+.content {
+  margin-bottom: 12px;
+}
+.thirdThirdContainer {
+  display: flex;
+  justify-content: space-between;
+  &:last-child {
+    margin-bottom: 10px;
+  }
+}
+.thirdThirdContainer_div {
+  width: 30%;
+  display: flex;
+  align-items: center;
+}
+.thirdThirdContainer_div_box_like {
+  border: none;
+  background-color: inherit;
+}
+.thirdThirdContainer_div_commit {
+  border: none;
+  background-color: inherit;
+}

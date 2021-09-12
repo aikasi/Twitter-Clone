@@ -59,23 +59,27 @@ export const getHome = async (req: Request, res: Response) => {
     fs.mkdirSync("uploads/tweet/video");
   }
 
-  const tweets = await getMongoTweet();
-  const userRepository = getMongoRepository(User);
   if (res.locals.loggedIn) {
-    const user = await userRepository.findOne(res.locals.loggedInUser.id);
-    console.log(tweets);
-    console.log(user);
+    const tweets = await getMongoTweet();
+    const userRepository = getMongoRepository(User);
+    if (res.locals.loggedIn) {
+      const user = await userRepository.findOne(res.locals.loggedInUser.id);
+      console.log(tweets);
+      console.log(user);
+      return res.render("home", {
+        tweets,
+        user,
+        pageTitle: "Home",
+      });
+    }
+
     return res.render("home", {
       tweets,
-      user,
       pageTitle: "Home",
     });
+  } else {
+    return res.redirect(routes.join);
   }
-
-  return res.render("home", {
-    tweets,
-    pageTitle: "Home",
-  });
 };
 export const getJoin = async (
   req: Request,
@@ -197,6 +201,9 @@ export const postTweet = async (
       tweet.lowerTweetNumber = 0;
       tweet.likes = [];
       tweet.lowerTweets = [];
+      tweet.firstName = res.locals.loggedInUser.firstName;
+      tweet.lastName = res.locals.loggedInUser.lastName;
+      tweet.tweetUserAvata = res.locals.loggedInUser.profilePhoto;
       if (tweet.file) {
         const pathNames = req.file.mimetype.split("/");
         const pathName = pathNames[0];
@@ -292,9 +299,19 @@ export const getUserProfile = async (
     params: { id },
   } = req;
   const userRepository = getMongoRepository(User);
-  const user = await userRepository.findOne(id);
-  console.log(user);
-  res.render("userProfile", { user, id });
+  const tweetsRepository = getMongoRepository(Tweet);
+  const userDB = await userRepository.findOne(ObjectId(id));
+  const users = { userDB };
+  const user = users.userDB;
+  const userTweet = user.tweets;
+  const tweets = [];
+  for (const value of userTweet) {
+    const tweetsDB = await tweetsRepository.findOne(value);
+    if (!tweetsDB.reply) {
+      tweets.push(tweetsDB);
+    }
+  }
+  res.render("userProfile", { user, id, tweets });
 };
 
 export const postUserProfile = async (
@@ -383,4 +400,32 @@ export const postUserFollowCancel = async (
   );
 
   return res.redirect(`/profile/${id}`);
+};
+
+export const getProfileWithReplies = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {
+    params: { id },
+  } = req;
+};
+export const getProfileMedia = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {
+    params: { id },
+  } = req;
+};
+export const getProfilelikes = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {
+    params: { id },
+  } = req;
 };

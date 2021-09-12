@@ -1,0 +1,26 @@
+.homeMiddle {
+  border-bottom: 1px solid black;
+  margin-bottom: 10px;
+}
+.homeMiddle_Header {
+  border-bottom: 1px solid black;
+  margin-bottom: 12px;
+}
+.homeMiddle_Header_Block {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: bold;
+  align-items: center;
+  height: 50px;
+}
+.homeMiddle_createTweet {
+  display: flex;
+}
+.homeMiddle_createTweet_Block {
+  padding-top: 8px;
+  margin-bottom: 5px;
+  padding-bottom: 15px;
+}

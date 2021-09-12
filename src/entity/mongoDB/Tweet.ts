@@ -22,6 +22,9 @@ export interface TweetInfo {
   lowerTweetNumber?: number;
   likeNumber?: number;
   likes?: string[];
+  firstName: string;
+  lastName: string;
+  tweetUserAvata: string;
 }
 
 @Entity()
@@ -60,10 +63,18 @@ export class Tweet<TweetInfo> {
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createAt: Date;
 
+  @Column()
+  firstName: string;
+  @Column()
+  lastName: string;
+
   @UpdateDateColumn({
     type: "timestamp",
     default: () => "CURRENT_TIMESTAMP",
     onUpdate: "CURRENT_TIMESTAMP",
   })
   updateAt: Date;
+
+  @Column({ nullable: true })
+  tweetUserAvata: any;
 }

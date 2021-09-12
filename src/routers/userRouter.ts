@@ -11,6 +11,9 @@ import {
   getUserProfile,
   postUserProfile,
   postUserFollowCancel,
+  getProfileMedia,
+  getProfilelikes,
+  getProfileWithReplies,
 } from "../controllers/userController";
 import routes from "../../routes";
 import { uploadAvatar } from "../middleware";
@@ -32,6 +35,10 @@ userRouter.post("/profile/edit", uploadAvatar, postProfileEdit);
 
 userRouter.get("/profile/:id", getUserProfile);
 userRouter.post("/profile/:id", postUserProfile);
+
+userRouter.get(`/profile/:id/with_replies`, getProfileWithReplies);
+userRouter.get("/profile/:id/media", getProfileMedia);
+userRouter.get("/profile/:id/likes", getProfilelikes);
 
 userRouter.post("/profile/:id/cancel", postUserFollowCancel);
 

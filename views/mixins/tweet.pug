@@ -1,0 +1,49 @@
+mixin tweetBlock({tweet})
+    div.firstContainer
+        div.secondContainer
+            img(src=loggedInUser.profilePhoto).image
+        div.secondContainer
+            div.thirdContainer
+                div.thirdFirstContainer
+                    //- h3 #{loggedInUser.firstName}#{loggedInUser.lastName}
+                    h3 제목
+                    h3 닉네임
+                div.thirdSecondContainer
+                    if tweet.content
+                        div.content
+                            h4 #{tweet.content}
+                div.thirdThirdContainer
+                    div.reply.thirdThirdContainer_div
+                        button(type='submit')#jsAddAnser
+                            span.far.fa-comment #{tweet.lowerTweetNumber}
+                    div.thirdThirdContainer_div
+                        if user
+                            if user.likes
+                                each like, index in user.likes
+                                    if like == tweet.id 
+                                        - var isLike = true
+                                    if isLike
+                                        div
+                                            button(type='submit' class="#{loggedInUser.id} unlike" value=tweet.id)#jsAddLike.addLike 좋아요 취소
+                                            span=tweet.likeNumber
+                                        -break
+                                    if (index + 1)  > (user.likes.length - 1)
+                                        div
+                                            button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요
+                                            span=tweet.likeNumber
+                                else
+                                    div
+                                        button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요#{tweet.likeCount}
+                                        span=tweet.likeNumber
+                            else 
+                                div
+                                    button(type='submit' class=loggedInUser.id value=tweet.id)#jsAddLike.addLike 좋아요#{tweet.likeCount}
+                                    span=tweet.likeNumber
+                        else 
+                            div
+                                button(type='submit' value=tweet.id)#jsAddLike.addLike 좋아요 #{tweet.likeCount}
+                                span=tweet.likeNumber
+                    div.thirdThirdContainer_div
+                        a(href=routes.tweetDelete(tweet.id)) 삭제 
+                    div.thirdThirdContainer_div
+                        a(href="#") 공유

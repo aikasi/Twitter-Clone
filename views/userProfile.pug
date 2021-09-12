@@ -1,44 +1,60 @@
 extends base.pug
+include mixins/tweetMedia
 
 block content
-    div
-        div
-            img(src=user.headerPhoto alt="")
-        div
-            div 
-                img(src=user.headerPhoto alt="")
-                span #{user.lastName} #{user.firstName}
-                div 
-                    span #{user.nick}
-                    span #{user.selfIntroduction}
-                    span #{user.createAt}
-                    div
-                        a(href="#") #{user.followNumber} 팔로우 중
-                        a(href="#") #{user.follwingNumber} 팔로워
-            div
-                if id === loggedInUser.id 
-                    a(href=`/profile/${loggedInUser.id}`) 프로필 수정 
-                else 
-                    each item in user.follow
-                        if item === id
-                            form(action=`/profile/${id}/cancel` method="POST") 
-                                input(type="submit" value="팔로우 취소")
-                            -break
+    div.userProfile_div
+        div.userProfile_div_firstdiv
+            if loggedInUser.headerPhoto
+                img(src=loggedInUser.headerPhoto).userProfile_div_firstdiv_header
+            else
+                div.userProfile_div_firstdiv_header.userProfile_div_firstdiv_back
+        div.userProfile_div_seconddiv
+            div.userProfile_div_seconddiv_thirdDiv
+                div
+                    img(src=`../${user.profilePhoto}` alt="").userProfileImage
+                div.userProfile_div_seconddiv_thirdDiv_secondDiv
+                    if id === loggedInUser.id 
+                        a(href=`/profile/edit`) 프로필 수정 
                     else 
-                        form(method="POST") 
-                            input(type="submit" value="팔로우")
-    div         
-        nav
-            ul
-                li
-                    a(href="#") 트윗
-                    block tweet
-                li 
-                    a(href="#") 트윗 및 답글
-                    block tweet
-                li 
-                    a(href="#") 미디어
-                    block tweet
-                li
-                    a(href="#") 마음에 들어요
-                    block tweet
+                        each item in user.follow
+                            if item === id
+                                form(action=`/profile/${id}/cancel` method="POST") 
+                                    input(type="submit" value="팔로우 취소")
+                                -break
+                        else 
+                            form(method="POST") 
+                                input(type="submit" value="팔로우")
+            div.userProfile_div_thirddiv
+                if user.lastName && user.firstName
+                    span.userProfile_div_thirddiv_Name #{user.lastName} #{user.firstName}
+                else
+                    span.userProfile_div_thirddiv_Name 유저의 이름이 설정되지 않았습니다.
+                if user.nick
+                    span.userProfile_div_thirddiv_Nick #{user.nick}
+                else
+                    span.userProfile_div_thirddiv_Nick 닉네임이 설정되지 않았습니다.
+                if user.selfIntroduction
+                    span.userProfile_div_thirddiv_Self #{user.selfIntroduction}
+                else 
+                    span.userProfile_div_thirddiv_Self 자기소개가 설정되지 않았습니다.
+                span.userProfile_div_thirddiv_createAt.fas.fa-calendar-alt=` ${user.createAt}`
+                div.userProfile_div_thirddiv_firstDiv
+                    a(href="#").userProfile_div_thirddiv_firstDiv_FollowingLike #{user.followNumber}
+                        span Following 
+                    a(href="#") #{user.follwingNumber}
+                        span  Follwer
+    div.userProfile_secondDiv
+        nav.userProfile_secondDiv_nav
+            ul.userProfile_secondDiv_nav_ul
+                li.userProfile_secondDiv_nav_ul_li
+                    a(href=`/profile/${user.id}`) 트윗
+                li.userProfile_secondDiv_nav_ul_li
+                    a(href=`/profile/${user.id}/with_replies`) 트윗 및 답글
+                li.userProfile_secondDiv_nav_ul_li 
+                    a(href=`/profile/${user.id}/media`) 미디어
+                li.userProfile_secondDiv_nav_ul_li
+                    a(href=`/profile/${user.id}/likes`) 마음에 들어요
+        div
+            if(tweets)
+                each tweet in tweets
+                    +tweetMediaBlock({tweet:tweet})

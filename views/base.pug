@@ -6,27 +6,11 @@ html(lang="en")
         link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css")
         link(rel="stylesheet", href="/assets/css/styles.css")
     body
-        div
-            header 
-                div
-                    a(href="/") 
-                        i.fab.fa-youtube
-                    h1 #{pageTitle} Twitter Clone
-                    if loggedIn
-                        a(href="/") 홈 
-                        a(href="/profile") 프로필
-                        a(href="#") 트윗하기
-                    else
-                        a(href="#") 탐색하기
-                        a(href="#") 설정
-                div 
-                    if loggedIn
-                        a(href="/join") 로그아웃
-                    else
-                        a(href="/login") 로그인 
-            main
+        div.main
+            div.mainContainer
+                include partials/header.pug
+            main.mainContent
                 block content
-            div
-                
-        include partials/footer.pug
+            div.mainContainer
+                include partials/footer.pug    
     script(src="/assets/js/main.js") 

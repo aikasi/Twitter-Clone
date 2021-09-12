@@ -1,0 +1,31 @@
+.tweetCreate {
+}
+.tweetCreateInputBox {
+  display: none;
+}
+.tweetCreate_inputText {
+  border: none;
+  font-size: 22px;
+  height: 30px;
+  margin-bottom: 15px;
+}
+.tweetCreate_div_file {
+  font-size: 24px;
+  color: $sky;
+}
+.tweetCreate_div {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 10px;
+  border-top: 1px solid black;
+  padding-top: 10px;
+}
+.tweetCreate_div_sumit {
+  border: none;
+  background-color: $sky;
+  width: 90px;
+  height: 35px;
+  border-radius: 15% / 50%;
+}
